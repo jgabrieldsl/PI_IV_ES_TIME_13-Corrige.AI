@@ -27,7 +27,7 @@ export const Home = () => {
       <Card className="w-full max-w-2xs mx-8">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">
-            Teste inicial da API
+            Sistema de Conexão
           </CardTitle>
         </CardHeader>
         
@@ -99,7 +99,7 @@ export const Home = () => {
                 <p>Conecte-se para começar a usar o chat</p>
               </div>
             )}
-            {messages.map((msg, index) => (
+            {messages.map((msg: any, index: any) => (
               <div 
                 key={index} 
                 className={`flex items-end gap-2 ${

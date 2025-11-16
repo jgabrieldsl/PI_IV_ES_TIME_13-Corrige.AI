@@ -103,7 +103,7 @@ O sistema implementa uma arquitetura de comunicação em tempo real dividida em 
 ### Fluxo de Conexão com Socket
 
 1. **Estabelecimento de Conexão**:
-   - Frontend → `POST /api/test` → Backend (porta 8080)
+   - Frontend → `POST /api/connect` → Backend (porta 8080)
    - Backend abre conexão TCP persistente com Servidor (porta 3001)
    - Servidor gera `socketId` único (UUID) e retorna quantidade de usuários conectados
    - Backend armazena conexão no pool (`ConcurrentHashMap`)
@@ -115,7 +115,7 @@ O sistema implementa uma arquitetura de comunicação em tempo real dividida em 
    - Pool de conexões gerenciado por `SocketConnectionManager`
 
 3. **Desconexão**:
-   - Frontend → `DELETE /api/disconnect/{socketId}` → Backend
+   - Frontend → `DELETE /api/connections/{socketId}` → Backend
    - Backend fecha socket TCP com Servidor
    - Remove conexão do pool
    - Servidor atualiza contador de usuários
@@ -183,9 +183,9 @@ O chat permite comunicação bidirecional entre múltiplos usuários através de
 #### Conexão
 | Método | Endpoint | Descrição | Request Body | Response |
 |--------|----------|-----------|--------------|----------|
-| POST | `/api/test` | Estabelece conexão com servidor | `{ tipo: "CONNECT", dados: { userId, userType, authToken } }` | `{ tipo: "CONNECT_SUCCESS", dados: { socketId, timestamp, totalUsuarios } }` |
+| POST | `/api/connect` | Estabelece conexão com servidor | `{ tipo: "CONNECT", dados: { userId, userType, authToken } }` | `{ tipo: "CONNECT_SUCCESS", dados: { socketId, timestamp, totalUsuarios } }` |
 | GET | `/api/connections` | Lista todas as conexões ativas | - | `[{ socketId, timestamp, tipo, totalUsuarios }]` |
-| DELETE | `/api/disconnect/{socketId}` | Desconecta um socket específico | - | `{ message: "Desconectado com sucesso" }` |
+| DELETE | `/api/connections/{socketId}` | Desconecta um socket específico | - | `{ message: "Desconectado com sucesso" }` |
 
 #### Chat
 | Método | Endpoint | Descrição | Request Body | Response |
