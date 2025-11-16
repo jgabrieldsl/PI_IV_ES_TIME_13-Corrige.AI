@@ -34,14 +34,11 @@ public class ConnectionController {
     @NonNull
     public ResponseEntity<?> establishConnection(@RequestBody @NonNull ConnectRequest request) {
         try {
-            logger.info("Recebendo requisição de conexão: {}", request);
             ConnectResponse response = serverCommunicationService.handleConnection(request);
-            logger.info("Resposta gerada com sucesso: {}", response);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.error("Erro ao processar requisição de conexão", e);
-            return ResponseEntity.internalServerError()
-                    .body(new ErrorResponse("Erro ao processar requisição: " + e.getMessage()));
+            return ResponseEntity.internalServerError().body(new ErrorResponse("Erro ao processar requisição: " + e.getMessage()));
         }
     }
 
@@ -59,13 +56,11 @@ public class ConnectionController {
     @DeleteMapping("/connections/{socketId}")
     public ResponseEntity<?> disconnect(@PathVariable String socketId) {
         try {
-            logger.info("Desconectando socketId: {}", socketId);
             connectionManager.disconnect(socketId);
             return ResponseEntity.ok(new SuccessResponse("Desconectado com sucesso"));
         } catch (Exception e) {
             logger.error("Erro ao desconectar", e);
-            return ResponseEntity.internalServerError()
-                    .body(new ErrorResponse("Erro ao desconectar: " + e.getMessage()));
+            return ResponseEntity.internalServerError().body(new ErrorResponse("Erro ao desconectar: " + e.getMessage()));
         }
     }
 
@@ -74,13 +69,9 @@ public class ConnectionController {
         @JsonProperty("message")
         private final String message;
 
-        public SuccessResponse(String message) {
-            this.message = message;
-        }
+        public SuccessResponse(String message) { this.message = message; }
 
-        public String getMessage() {
-            return message;
-        }
+        public String getMessage() { return message; }
     }
 
     @SuppressWarnings("unused") // getMessage() é usado pelo Jackson para serialização JSON
@@ -88,12 +79,8 @@ public class ConnectionController {
         @JsonProperty("message")
         private final String message;
 
-        public ErrorResponse(String message) {  
-            this.message = message;
-        }
+        public ErrorResponse(String message) { this.message = message; }
 
-        public String getMessage() {
-            return message;
-        }
+        public String getMessage() { return message; }
     }
 }
