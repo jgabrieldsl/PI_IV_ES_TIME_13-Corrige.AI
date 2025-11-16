@@ -27,17 +27,17 @@ public class AceitadoraDeConexao extends Thread {
     public void run() {
         for (;;) {
             Socket conexao = null;
+            
             try {
                 conexao = this.pedido.accept();
-            } catch (Exception erro) {
-                continue;
-            }
+            } catch (Exception erro) { continue; }
 
             SupervisorDeConexao supervisorDeConexao = null;
+
             try {
                 supervisorDeConexao = new SupervisorDeConexao(conexao, usuarios);
-            } catch (Exception erro) {
-            }
+            } catch (Exception erro) {}
+            
             supervisorDeConexao.start();
         }
     }
