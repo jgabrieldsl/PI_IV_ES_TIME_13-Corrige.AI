@@ -10,7 +10,9 @@ public class Parceiro {
     private Socket conexao;
     private ObjectInputStream receptor;
     private ObjectOutputStream transmissor;
+
     private Comunicado proximoComunicado = null;
+
     private Semaphore mutex = new Semaphore(1, true);
     
     private String userId;
@@ -30,9 +32,9 @@ public class Parceiro {
         this.transmissor = transmissor;
     }
 
-    public void receba(Comunicado x) throws Exception {
+    public void receba(Comunicado comunicado) throws Exception {
         try {
-            this.transmissor.writeObject(x);
+            this.transmissor.writeObject(comunicado);
             this.transmissor.flush();
         } catch (Exception erro) {
             throw new Exception("Erro de transmissao");

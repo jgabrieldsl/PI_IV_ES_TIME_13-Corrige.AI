@@ -20,6 +20,7 @@ public class ServidorTicket {
         ArrayList<Parceiro> usuarios = new ArrayList<Parceiro>();
 
         AceitadoraDeConexao aceitadoraDeConexao = null;
+        
         try {
             aceitadoraDeConexao = new AceitadoraDeConexao(porta, usuarios);
             aceitadoraDeConexao.start();
