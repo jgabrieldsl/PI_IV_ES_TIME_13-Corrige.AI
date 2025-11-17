@@ -14,4 +14,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080', //programa que roda o front (vite) manda qualquer solicitação que tenha "/api" para o backend ao invés de tentar resolver ele mesmo
+        changeOrigin: true,
+      }
+    }
+  }
 })
