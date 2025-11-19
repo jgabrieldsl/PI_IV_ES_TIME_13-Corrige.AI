@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
 import com.corrigeai.api.models.Redacao;
 import com.corrigeai.api.repositories.RedacaoRepository;
+import java.util.List;
 
 @Service
 public class RedacaoService {
@@ -32,10 +33,13 @@ public class RedacaoService {
     }
 
     public Redacao getRedacaoPorId(String id){
-        
         // método padrão "findById" retorna classe wrapper "Optional" com o que você pediu dentro ou nada se n achou
         return redacaoRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Redação não encontrada"));
+    }
+
+    public List<Redacao> listarRedacoesUser(String userId){
+        return redacaoRepository.findByUserId(userId);
     }
 
 }
