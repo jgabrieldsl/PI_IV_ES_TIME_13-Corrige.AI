@@ -23,4 +23,16 @@ public class RedacaoController{
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping("/{id}")
+    // ResponseEntity conversa com o front retornando 200 (ok), 404(n achou) e 500(erro).
+    // pathVariable diz que o id faz parte da url (semântica)
+    public ResponseEntity<Redacao> getRedacaoPorId(@PathVariable String id){
+        try{
+            Redacao redacaoDoDB = redacaoService.getRedacaoPorId(id);
+            return ResponseEntity.ok(redacaoDoDB);
+        } catch (RuntimeException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
