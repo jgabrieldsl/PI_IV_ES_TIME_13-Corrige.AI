@@ -31,4 +31,11 @@ public class RedacaoService {
         return redacaoRepository.save(novaRedacao);
     }
 
+    public Redacao getRedacaoPorId(String id){
+        
+        // método padrão "findById" retorna classe wrapper "Optional" com o que você pediu dentro ou nada se n achou
+        return redacaoRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Redação não encontrada"));
+    }
+
 }
