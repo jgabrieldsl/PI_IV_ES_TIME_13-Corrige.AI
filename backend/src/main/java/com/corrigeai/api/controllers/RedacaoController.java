@@ -2,7 +2,7 @@ package com.corrigeai.api.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import com.corrigeai.api.dtos.RedacaoRequestDTO;
 import com.corrigeai.api.models.Redacao;
 import com.corrigeai.api.services.RedacaoService;
 import java.util.List;
@@ -16,9 +16,9 @@ public class RedacaoController{
 
     // endpoint de upload
     @PostMapping("/upload")
-    public ResponseEntity<Redacao> uploadRedacao(@RequestParam("file") MultipartFile arquivoParaSalvar, @RequestParam("userId") String userId){
+    public ResponseEntity<Redacao> uploadRedacao(@RequestBody RedacaoRequestDTO redacaoRequest){
         try{
-                Redacao redacaoSalva = redacaoService.salvarUpload(arquivoParaSalvar, userId);
+                Redacao redacaoSalva = redacaoService.salvarRedacao(redacaoRequest.getConteudo(), redacaoRequest.getUserId());
                 return ResponseEntity.ok(redacaoSalva);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
