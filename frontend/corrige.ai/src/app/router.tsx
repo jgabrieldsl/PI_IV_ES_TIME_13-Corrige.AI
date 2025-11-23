@@ -6,6 +6,7 @@ import SignupPage from './auth/signup/view'
 
 import Home from './home'
 
+
 const ROUTES = {
   not_found: '/*',
   login: '/auth/login',

@@ -1,11 +1,7 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { Button } from "@/shared/components/ui/button";
 import {
     Form,
     FormControl,
@@ -13,30 +9,17 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-
-const formSchema = z.object({
-    email: z.string().email({
-        message: "Por favor, insira um email válido.",
-    }),
-    password: z.string().min(6, {
-        message: "A senha deve ter pelo menos 6 caracteres.",
-    }),
-    confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "As senhas não coincidem",
-    path: ["confirmPassword"],
-});
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { signupSchema, type SignupCredentials } from "../models";
+import { useSignup } from "../hooks";
 
 export default function SignupPage() {
-    const navigate = useNavigate();
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+    const { handleSignup, loading, error } = useSignup();
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<SignupCredentials>({
+        resolver: zodResolver(signupSchema),
         defaultValues: {
             email: "",
             password: "",
@@ -44,18 +27,8 @@ export default function SignupPage() {
         },
     });
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
-        setLoading(true);
-        setError(null);
-        try {
-            await createUserWithEmailAndPassword(auth, values.email, values.password);
-            navigate("/"); // Redirect to home or dashboard
-        } catch (err: any) {
-            console.error(err);
-            setError("Falha ao criar conta. Tente novamente.");
-        } finally {
-            setLoading(false);
-        }
+    async function onSubmit(values: SignupCredentials) {
+        await handleSignup(values);
     }
 
     return (

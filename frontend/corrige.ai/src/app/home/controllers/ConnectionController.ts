@@ -3,6 +3,9 @@ import type { ConnectionRequest, ConnectionResponse } from '../models'
 import { ConnectionService } from '../services'
 import { ApiService } from '@/shared/api'
 
+
+
+
 interface IConnection {
   isConnecting: boolean
   connection: ConnectionResponse
@@ -24,8 +27,8 @@ export const useConnectionController = create<IConnection>()((set, get) => {
 
         const data = await connectionService.createConnection(params)
 
-        set({ 
-          connection: data, 
+        set({
+          connection: data,
           isConnecting: false,
           currentUserId: params.dados.userId // Salva o userId atual
         })
@@ -40,7 +43,7 @@ export const useConnectionController = create<IConnection>()((set, get) => {
         const { connection } = get()
         if (connection?.dados?.socketId) {
           await connectionService.disconnect(connection.dados.socketId)
-          set({ 
+          set({
             connection: {} as ConnectionResponse,
             currentUserId: ''
           })
