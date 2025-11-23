@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { useConnectionHome, useChatHome } from './hooks'
+
+
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card"
 import { Button } from "@/shared/components/ui/button"
 import { Alert, AlertDescription } from "@/shared/components/ui/alert"
-import { ExpandableChat, ExpandableChatBody, ExpandableChatFooter, ExpandableChatHeader } from '@/components/ui/expandable-chat'
+import { ExpandableChat, ExpandableChatBody, ExpandableChatFooter, ExpandableChatHeader } from '@/shared/components/ui/expandable-chat'
 import { Input } from '@/shared/components/ui/input'
 import { Paperclip, Send, LogOut } from 'lucide-react'
-import { useAuth } from '../../contexts/auth-context'
+import { useAuth } from '@/app/auth/contexts/auth-context'
 import { useNavigate } from 'react-router-dom'
 
 export const Home = () => {
@@ -125,8 +128,8 @@ export const Home = () => {
                   }`}
               >
                 <div className={`${msg.userId === currentUserId
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted'
                   } p-3 rounded-lg max-w-[80%]`}
                 >
                   <p className="text-xs font-semibold mb-1">

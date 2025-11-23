@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { useChatController } from '../controllers'
 
+
+
+
 export const useChatHome = (socketId: string | null, currentUserId: string) => {
   const { messages, isConnected, setCurrentUserId, connectToChat, sendMessage, disconnectFromChat } = useChatController()
   const hasConnected = useRef(false)
@@ -16,7 +19,7 @@ export const useChatHome = (socketId: string | null, currentUserId: string) => {
       connectToChat(socketId)
       hasConnected.current = true
     }
-    
+
     return () => {
       if (hasConnected.current) {
         disconnectFromChat()
