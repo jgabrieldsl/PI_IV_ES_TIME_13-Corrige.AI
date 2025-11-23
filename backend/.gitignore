@@ -89,3 +89,6 @@ application-*.properties
 
 # Spring Boot
 spring-*.log
+
+# ignore arquives with production configurations
+application.properties
