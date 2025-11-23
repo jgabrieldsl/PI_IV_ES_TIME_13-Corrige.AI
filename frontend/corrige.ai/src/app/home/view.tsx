@@ -5,11 +5,15 @@ import { Button } from "@/shared/components/ui/button"
 import { Alert, AlertDescription } from "@/shared/components/ui/alert"
 import { ExpandableChat, ExpandableChatBody, ExpandableChatFooter, ExpandableChatHeader } from '@/components/ui/expandable-chat'
 import { Input } from '@/shared/components/ui/input'
-import { Paperclip, Send } from 'lucide-react'
+import { Paperclip, Send, LogOut } from 'lucide-react'
+import { useAuth } from '../../contexts/auth-context'
+import { useNavigate } from 'react-router-dom'
 
 export const Home = () => {
   const { connection, isConnecting, currentUserId, handleConnect, handleDisconnect } = useConnectionHome()
   const [messageInput, setMessageInput] = useState('')
+  const { signOut } = useAuth()
+  const navigate = useNavigate()
 
   const isConnected = connection?.dados?.socketId
   const { messages, sendMessage } = useChatHome(isConnected || null, currentUserId)
@@ -22,15 +26,30 @@ export const Home = () => {
     }
   }
 
+  const handleLogout = async () => {
+    try {
+      await signOut()
+      navigate('/auth/login')
+    } catch (error) {
+      console.error('Failed to log out', error)
+    }
+  }
+
   return (
-    <main className="h-screen w-screen flex items-center justify-center">
+    <main className="h-screen w-screen flex items-center justify-center relative">
+      <div className="absolute top-4 right-4">
+        <Button variant="outline" onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
+          Sair
+        </Button>
+      </div>
       <Card className="w-full max-w-2xs mx-8">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">
             Sistema de Conexão
           </CardTitle>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {isConnecting && (
             <Alert>
@@ -39,7 +58,7 @@ export const Home = () => {
               </AlertDescription>
             </Alert>
           )}
-          
+
           {isConnected && (
             <Card className="bg-green-50 border-green-200">
               <CardHeader>
@@ -61,7 +80,7 @@ export const Home = () => {
             </Card>
           )}
 
-          <Button 
+          <Button
             onClick={handleConnect}
             disabled={isConnecting || !!isConnected}
             variant={"default"}
@@ -71,7 +90,7 @@ export const Home = () => {
           </Button>
 
           {isConnected && (
-            <Button 
+            <Button
               onClick={handleDisconnect}
               variant={"destructive"}
               className="w-full"
@@ -100,15 +119,13 @@ export const Home = () => {
               </div>
             )}
             {messages.map((msg: any, index: any) => (
-              <div 
-                key={index} 
-                className={`flex items-end gap-2 ${
-                  msg.userId === currentUserId ? 'justify-end' : ''
-                }`}
+              <div
+                key={index}
+                className={`flex items-end gap-2 ${msg.userId === currentUserId ? 'justify-end' : ''
+                  }`}
               >
-                <div className={`${
-                  msg.userId === currentUserId 
-                    ? 'bg-primary text-primary-foreground' 
+                <div className={`${msg.userId === currentUserId
+                    ? 'bg-primary text-primary-foreground'
                     : 'bg-muted'
                   } p-3 rounded-lg max-w-[80%]`}
                 >
