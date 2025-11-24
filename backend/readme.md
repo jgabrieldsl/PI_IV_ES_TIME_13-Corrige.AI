@@ -19,17 +19,26 @@ backend/
 │   │   │   └── com/corrigeai/api/
 │   │   │       ├── controllers/     # REST Controllers
 │   │   │       │   ├── ChatController.java
-│   │   │       │   └── ConnectionController.java
+│   │   │       │   ├── ConnectionController.java
+│   │   │       │   └── RedacaoController.java
 │   │   │       ├── services/        # Lógica de negócio
-│   │   │       │   ├── SocketConnectionManager.java
+│   │   │       │   ├── GeminiAIService.java
+│   │   │       │   ├── RedacaoService.java
 │   │   │       │   ├── ServerCommunicationService.java
 │   │   │       │   ├── SocketClientService.java
+│   │   │       │   ├── SocketConnectionManager.java
 │   │   │       │   └── SocketService.java
-│   │   │       ├── models/          # Entidades
+│   │   │       ├── dtos/            # DTOs usados pela API e IA
+│   │   │       │   ├── AvaliacaoResultadoDTO.java
+│   │   │       │   ├── CompetenciaDetalheDTO.java
+│   │   │       │   └── RedacaoRequestDTO.java
+│   │   │       ├── models/          # Entidades / documentos MongoDB
 │   │   │       │   ├── ConnectRequest.java
 │   │   │       │   ├── ConnectResponse.java
+│   │   │       │   ├── Redacao.java
 │   │   │       │   └── SocketResponse.java
 │   │   │       ├── repositories/    # Acesso MongoDB
+│   │   │       │   ├── RedacaoRepository.java
 │   │   │       │   └── SocketResponseRepository.java
 │   │   │       ├── config/          # Configurações
 │   │   │       │   ├── CorsConfig.java
@@ -37,8 +46,8 @@ backend/
 │   │   │       └── CorrigeAiApplication.java
 │   │   └── resources/
 │   │       └── application.yml      # Configuração MongoDB
-│   └── test/                        # Testes
-└── pom.xml
+│   └── test/                        # Testes (JUnit, Mockito)
+├── pom.xml
 ```
 
 ### Executar o projeto

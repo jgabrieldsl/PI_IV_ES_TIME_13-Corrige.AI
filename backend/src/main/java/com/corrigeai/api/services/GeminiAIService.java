@@ -2,7 +2,7 @@ package com.corrigeai.api.services;
 
 import java.util.List;
 import com.google.genai.Client;
-import com.google.genai.types.Content; // ⬅️ Usando 'types' (o mais comum)
+import com.google.genai.types.Content; 
 import com.google.genai.types.GenerateContentConfig;
 import com.google.genai.types.Part;
 import com.google.genai.types.GenerateContentResponse; 
@@ -37,10 +37,9 @@ public class GeminiAIService {
              Não inclua nenhum texto, saudações, ou explicação fora da estrutura JSON.
              """;
             
-        // 1. Cria a parte do sistema (instrução)
+      
         Part systemPart = Part.builder().text(instrucaoParaAvaliador).build();
 
-        // 2. Cria a configuração de conteúdo (usando a instrução do sistema e forçando JSON)
         GenerateContentConfig config = GenerateContentConfig.builder()
             .systemInstruction(Content.builder().parts(List.of(systemPart)).build()) 
             .responseMimeType("application/json") 
@@ -48,12 +47,10 @@ public class GeminiAIService {
         
         String userPrompt = "Avalie a seguinte redação e me devolva o resultado no formato JSON estrito: \n\n" + textoRedacao;
 
-        // 3. Cria a parte do usuário
         Part userTextPart = Part.builder().text(userPrompt).build();
-        // Converte o Part em Content porque o SDK espera List<Content> como entrada
+
         Content userContent = Content.builder().parts(List.of(userTextPart)).build();
         
-        // 4. Chamada à API — Passando uma lista de Content para o SDK.
         GenerateContentResponse response = geminiClient.models.generateContent(
             MODEL_NAME, 
             List.of(userContent),
