@@ -1,6 +1,5 @@
 package com.corrigeai.api.dtos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 // ➡️ DTO para cada item da lista de competências
 public class CompetenciaDetalheDTO {
