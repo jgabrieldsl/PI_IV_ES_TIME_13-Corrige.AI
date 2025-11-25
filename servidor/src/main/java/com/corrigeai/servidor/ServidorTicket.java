@@ -20,6 +20,7 @@ public class ServidorTicket {
         ArrayList<Parceiro> usuarios = new ArrayList<Parceiro>();
 
         AceitadoraDeConexao aceitadoraDeConexao = null;
+        
         try {
             aceitadoraDeConexao = new AceitadoraDeConexao(porta, usuarios);
             aceitadoraDeConexao.start();
@@ -42,7 +43,7 @@ public class ServidorTicket {
             System.out.print("> ");
 
             String comando = scanner.nextLine();
-
+    
             if (comando.toLowerCase().equals("desativar")) {
                 synchronized (usuarios) {
                     for (Parceiro usuario : usuarios) {
