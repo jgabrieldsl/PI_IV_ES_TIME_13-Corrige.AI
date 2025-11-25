@@ -51,7 +51,7 @@ synchronized (this.usuarios) {
 ### Backend (Spring Boot)
 
 **Endpoints:**
-- `POST /ap i/connect` - Conecta ao servidor
+- `POST /api/connect` - Conecta ao servidor
   ```json
   {
     "dados": {
