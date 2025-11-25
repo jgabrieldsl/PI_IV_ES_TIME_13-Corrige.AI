@@ -8,16 +8,18 @@ Utilizando APIs de IA para análise de texto, o sistema avalia competências com
 - **Feedback Detalhado**: Análise e comentários sobre gramática, coesão, argumentação e sugestões de melhoria.
 - **Relatórios de Progresso**: Acompanhamento do desempenho do usuário ao longo do tempo, com métricas e gráficos.
 - **Interface Amigável**: Plataforma web responsiva e acessível.
-- **Modo Freemium**: Versão gratuita com limitações e planos premium para acesso ilimitado.
 
 ## Tecnologias Utilizadas
 - **Frontend**: React com TypeScript
 - **Backend**: Java (Spring Boot para API RESTful)
 - **Servidor Java**: Servidor de sockets para comunicação em tempo real
 - **Banco de Dados**: MongoDB
-- **IA**: Integração com APIs externas
+- **Autenticação**: Firebase Authentication
+- **IA**: Integração com APIs externas (Gemini AI)
 - **Fluxo de Versionamento**: Gitflow
 - **Testes**: Implementação de testes unitários e de integração (usando JUnit para Java e Jest para React)
+
+---
 
 ## Como Rodar o Projeto
 
@@ -178,20 +180,7 @@ O chat permite comunicação bidirecional entre múltiplos usuários através de
    - Zustand state atualizado automaticamente
    - UI renderiza nova mensagem sem reload
 
-### Rotas e Endpoints Expostos
 
-#### Conexão
-| Método | Endpoint | Descrição | Request Body | Response |
-|--------|----------|-----------|--------------|----------|
-| POST | `/api/connect` | Estabelece conexão com servidor | `{ tipo: "CONNECT", dados: { userId, userType, authToken } }` | `{ tipo: "CONNECT_SUCCESS", dados: { socketId, timestamp, totalUsuarios } }` |
-| GET | `/api/connections` | Lista todas as conexões ativas | - | `[{ socketId, timestamp, tipo, totalUsuarios }]` |
-| DELETE | `/api/connections/{socketId}` | Desconecta um socket específico | - | `{ message: "Desconectado com sucesso" }` |
-
-#### Chat
-| Método | Endpoint | Descrição | Request Body | Response |
-|--------|----------|-----------|--------------|----------|
-| POST | `/api/chat/send` | Envia mensagem de chat | `{ socketId: "uuid", mensagem: "texto" }` | `{ message: "Mensagem enviada com sucesso" }` |
-| GET | `/api/chat/stream/{socketId}` | Stream SSE para receber mensagens | - | EventSource stream com eventos `chat-message` |
 
 #### Estrutura de Mensagens SSE
 ```javascript
@@ -204,6 +193,129 @@ data: {
   "timestamp": 1730777777000
 }
 ```
+
+---
+
+## 3º Entrega - Documentação e novas implementações
+
+### 1. Sistema de Autenticação (Firebase)
+
+O frontend utiliza **Firebase Authentication** para gerenciar login, cadastro e sessões de usuários de forma segura e escalável.
+
+#### Funcionalidades Implementadas
+- **Cadastro de Usuário (Sign Up)**: Validação de email/senha, criação de conta e redirecionamento.
+- **Login de Usuário**: Autenticação, persistência de sessão e tratamento de erros.
+- **Logout**: Encerramento seguro da sessão.
+- **Proteção de Rotas**: Context API e Hooks para controle de acesso.
+
+#### Estrutura
+- `src/app/auth/`: Contém contexts, services, models e views de autenticação.
+- `src/shared/lib/firebase.ts`: Configuração do Firebase.
+
+---
+
+### 2. API de Correção de Redações
+
+O sistema integra com a **Gemini AI** para correção automatizada de redações.
+
+#### Exemplo de Payload (POST)
+```json
+{
+  "conteudo": "Texto da redação...",
+  "userId": "user123"
+}
+```
+
+#### Exemplo de Resposta
+```json
+{
+  "status": "CORRIGIDA",
+  "pontuacaoTotal": 800,
+  "feedbackGeral": "Texto bem estruturado...",
+  "detalhesCompetencias": [ ... ]
+}
+```
+
+---
+
+### 3. Testes Automatizados
+
+O projeto conta com uma suíte robusta de testes automatizados cobrindo tanto o Backend quanto o Servidor Java.
+
+#### 3.1. Backend (Spring Boot)
+- **Escopo**: Testes unitários do serviço de correção de redação.
+- **Componente Principal**: `RedacaoService`
+- **Ferramentas**: JUnit 5, Mockito.
+- **Cenários**:
+    - Fluxo de sucesso (Mock da IA e persistência).
+    - Validação de entrada (conteúdo vazio).
+
+**Como Rodar:**
+```bash
+cd backend
+mvn test
+```
+
+#### 3.2. Servidor
+- **Escopo**: Testes Intraclasse e Interclasse.
+- **Componentes Testados**:
+    - `MensagemChat` (Unidade): Construtores e encapsulamento.
+    - `Parceiro` (Unidade): Validação de conexão e estado.
+    - `ServidorIntegrationTest` (Integração): Fluxo completo de conexão TCP e tratamento de erros.
+
+**Como Rodar:**
+```bash
+cd servidor
+mvn clean test
+```
+
+
+---
+
+## Documentação da API
+
+### 1. Conexão (Socket/TCP)
+
+| Método | Endpoint | Descrição | Request Body | Response |
+|--------|----------|-----------|--------------|----------|
+| **POST** | `/api/connect` | Estabelece conexão com servidor | `{ tipo: "CONNECT", dados: { userId, userType, authToken } }` | `{ tipo: "CONNECT_SUCCESS", dados: { socketId, timestamp, totalUsuarios } }` |
+| **GET** | `/api/connections` | Lista todas as conexões ativas | - | `[{ socketId, timestamp, tipo, totalUsuarios }]` |
+| **DELETE** | `/api/connections/{socketId}` | Desconecta um socket específico | - | `{ message: "Desconectado com sucesso" }` |
+
+### 2. Chat em Tempo Real
+
+| Método | Endpoint | Descrição | Request Body | Response |
+|--------|----------|-----------|--------------|----------|
+| **POST** | `/api/chat/send` | Envia mensagem de chat | `{ socketId: "uuid", mensagem: "texto" }` | `{ message: "Mensagem enviada com sucesso" }` |
+| **GET** | `/api/chat/stream/{socketId}` | Stream SSE para receber mensagens | - | EventSource stream com eventos `chat-message` |
+
+### 3. Redação e IA
+
+| Método | Endpoint | Descrição | Request Body | Response |
+|--------|----------|-----------|--------------|----------|
+| **POST** | `/api/redacoes/upload` | Envia redação para correção | `{ conteudo: "texto", userId: "id" }` | Objeto `Redacao` com feedback e nota |
+| **GET** | `/api/redacoes/{id}` | Busca redação por ID | - | Objeto `Redacao` |
+
+
+### Exemplos de Uso com cURL
+
+#### 1. Envio de Redação Completa
+
+```bash
+curl -X POST http://localhost:8080/api/redacoes/upload \
+  -H "Content-Type: application/json" \
+  -d '{
+    "conteudo": " ... ",
+    "userId": " ... "
+  }'
+```
+
+#### 2. Buscar Redação por ID
+
+```bash
+curl -X GET http://localhost:8080/api/redacoes/id_da_redacao
+```
+
 ---
 
 ## Contribuição
