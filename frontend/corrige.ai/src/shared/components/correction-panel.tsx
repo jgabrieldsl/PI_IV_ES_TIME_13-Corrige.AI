@@ -1,5 +1,3 @@
-"use client"
-
 import { ArrowLeft, MessageCircle, TrendingUp, Award, Lightbulb, CheckCircle2, AlertCircle } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
 import { Progress } from "@/shared/components/ui/progress"

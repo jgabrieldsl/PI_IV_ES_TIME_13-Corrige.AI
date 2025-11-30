@@ -1,5 +1,3 @@
-"use client"
-
 import { TrendingUp } from "lucide-react"
 
 const chartData = [
@@ -35,9 +33,8 @@ export function EvolutionChart() {
             <div key={data.week} className="flex-1 flex flex-col items-center gap-2">
               <div className="w-full h-36 flex items-end">
                 <div
-                  className={`w-full rounded-t-lg transition-all duration-500 ${
-                    isLast ? "gradient-ai" : "bg-foreground/30"
-                  }`}
+                  className={`w-full rounded-t-lg transition-all duration-500 ${isLast ? "gradient-ai" : "bg-foreground/30"
+                    }`}
                   style={{ height: `${height}%` }}
                 />
               </div>

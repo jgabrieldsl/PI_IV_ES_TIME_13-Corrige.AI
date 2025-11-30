@@ -1,26 +1,24 @@
-"use client"
-
-import type React from "react"
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Sparkles, Check } from "lucide-react"
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
-import { auth } from "@/shared/lib/firebase"
+import { Controller } from "react-hook-form"
 
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
 import { Label } from "@/shared/components/ui/label"
 import { Checkbox } from "@/shared/components/ui/checkbox"
 import { useToast } from "@/shared/hooks/use-toast"
+import { getAuthErrorMessage } from "../utils/auth-error"
+import { useSignup } from "../hooks/useSignup"
+import { useEffect } from "react"
 
 export default function SignupPage() {
     const [showPassword, setShowPassword] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const navigate = useNavigate()
+    const { form, handleSignup, loading, error, clearError } = useSignup()
+    const { register, control, watch, formState: { errors } } = form
     const { toast } = useToast()
+
+    const password = watch("password", "")
 
     const passwordRequirements = [
         { label: "Mínimo 8 caracteres", met: password.length >= 8 },
@@ -28,58 +26,17 @@ export default function SignupPage() {
         { label: "Um número", met: /\d/.test(password) },
     ]
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsLoading(true)
-
-        // Validate password requirements
-        const isPasswordValid = passwordRequirements.every(req => req.met)
-        if (!isPasswordValid) {
-            toast({
-                variant: "destructive",
-                title: "Senha fraca",
-                description: "Por favor, atenda a todos os requisitos de senha.",
-            })
-            setIsLoading(false)
-            return
-        }
-
-        try {
-            await createUserWithEmailAndPassword(auth, email, password)
-
-            // Update profile with name
-            if (auth.currentUser) {
-                await updateProfile(auth.currentUser, {
-                    displayName: name
-                })
-            }
-
-            toast({
-                title: "Conta criada com sucesso!",
-                description: "Bem-vindo ao Corrige.AI",
-            })
-            navigate("/")
-        } catch (error: any) {
-            console.error("Signup error:", error)
-            let errorMessage = "Ocorreu um erro ao criar a conta."
-
-            if (error.code === 'auth/email-already-in-use') {
-                errorMessage = "Este e-mail já está em uso."
-            } else if (error.code === 'auth/invalid-email') {
-                errorMessage = "E-mail inválido."
-            } else if (error.code === 'auth/weak-password') {
-                errorMessage = "A senha é muito fraca."
-            }
-
+    useEffect(() => {
+        if (error) {
+            const errorMessage = getAuthErrorMessage(error)
             toast({
                 variant: "destructive",
                 title: "Erro no cadastro",
                 description: errorMessage,
             })
-        } finally {
-            setIsLoading(false)
+            clearError()
         }
-    }
+    }, [error, toast, clearError])
 
     return (
         <div className="min-h-screen flex">
@@ -157,7 +114,7 @@ export default function SignupPage() {
                         <p className="mt-2 text-muted-foreground">Comece gratuitamente, sem cartão de crédito</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form onSubmit={handleSignup} className="space-y-5">
                         <div className="space-y-2">
                             <Label htmlFor="name" className="text-sm font-medium">
                                 Nome completo
@@ -168,12 +125,13 @@ export default function SignupPage() {
                                     id="name"
                                     type="text"
                                     placeholder="Seu nome"
-                                    className="pl-10 h-11"
-                                    required
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    className={`pl-10 h-11 ${errors.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                                    {...register("name")}
                                 />
                             </div>
+                            {errors.name && (
+                                <p className="text-sm text-destructive">{errors.name.message}</p>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -186,12 +144,13 @@ export default function SignupPage() {
                                     id="email"
                                     type="email"
                                     placeholder="seu@email.com"
-                                    className="pl-10 h-11"
-                                    required
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    className={`pl-10 h-11 ${errors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                                    {...register("email")}
                                 />
                             </div>
+                            {errors.email && (
+                                <p className="text-sm text-destructive">{errors.email.message}</p>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -204,10 +163,8 @@ export default function SignupPage() {
                                     id="password"
                                     type={showPassword ? "text" : "password"}
                                     placeholder="••••••••"
-                                    className="pl-10 pr-10 h-11"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
+                                    className={`pl-10 pr-10 h-11 ${errors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                                    {...register("password")}
                                 />
                                 <button
                                     type="button"
@@ -237,24 +194,43 @@ export default function SignupPage() {
                                     ))}
                                 </div>
                             )}
+                            {errors.password && (
+                                <p className="text-sm text-destructive">{errors.password.message}</p>
+                            )}
                         </div>
 
-                        <div className="flex items-start gap-2">
-                            <Checkbox id="terms" className="mt-0.5" required />
-                            <Label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer leading-relaxed">
-                                Eu concordo com os{" "}
-                                <Link to="/terms" className="text-foreground hover:underline">
-                                    Termos de Uso
-                                </Link>{" "}
-                                e{" "}
-                                <Link to="/privacy" className="text-foreground hover:underline">
-                                    Política de Privacidade
-                                </Link>
-                            </Label>
+                        <div className="space-y-2">
+                            <div className="flex items-start gap-2">
+                                <Controller
+                                    name="terms"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Checkbox
+                                            id="terms"
+                                            className="mt-0.5"
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    )}
+                                />
+                                <Label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer leading-relaxed">
+                                    Eu concordo com os{" "}
+                                    <Link to="/terms" className="text-foreground hover:underline">
+                                        Termos de Uso
+                                    </Link>{" "}
+                                    e{" "}
+                                    <Link to="/privacy" className="text-foreground hover:underline">
+                                        Política de Privacidade
+                                    </Link>
+                                </Label>
+                            </div>
+                            {errors.terms && (
+                                <p className="text-sm text-destructive">{errors.terms.message}</p>
+                            )}
                         </div>
 
-                        <Button type="submit" className="w-full h-11 font-medium" disabled={isLoading}>
-                            {isLoading ? (
+                        <Button type="submit" className="w-full h-11 font-medium" disabled={loading}>
+                            {loading ? (
                                 <span className="flex items-center gap-2">
                                     <span className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                                     Criando conta...

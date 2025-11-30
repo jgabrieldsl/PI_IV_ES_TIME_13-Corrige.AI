@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { Brain, FileText, BarChart3, CheckCircle2, Sparkles } from "lucide-react"
 
@@ -58,10 +56,10 @@ export function CorrectionLoading() {
             >
               <div
                 className={`w-10 h-10 rounded-lg flex items-center justify-center ${isActive
-                    ? "gradient-ai"
-                    : isComplete
-                      ? "bg-secondary text-foreground"
-                      : "bg-muted text-muted-foreground"
+                  ? "gradient-ai"
+                  : isComplete
+                    ? "bg-secondary text-foreground"
+                    : "bg-muted text-muted-foreground"
                   }`}
               >
                 {isComplete ? (

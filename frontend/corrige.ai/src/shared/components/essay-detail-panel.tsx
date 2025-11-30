@@ -1,5 +1,3 @@
-"use client"
-
 import {
   ArrowLeft,
   MessageCircle,
@@ -15,14 +13,16 @@ import { Button } from "@/shared/components/ui/button"
 import { Progress } from "@/shared/components/ui/progress"
 import { UserHeader } from "./user-header"
 import type { Essay } from "@/shared/lib/types"
+import type { User } from "firebase/auth"
 
 interface EssayDetailPanelProps {
   essay: Essay
   onBack: () => void
   onOpenChat: () => void
+  user: User | null
 }
 
-export function EssayDetailPanel({ essay, onBack, onOpenChat }: EssayDetailPanelProps) {
+export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetailPanelProps) {
   const { correction } = essay
 
   const formatDate = (date: Date) => {
@@ -41,7 +41,7 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat }: EssayDetailPanel
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden">
-      <UserHeader />
+      <UserHeader user={user} />
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto px-6 py-8">

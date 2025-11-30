@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { FileText, Calendar, TrendingUp, Search, Filter, ArrowUpRight, MessageCircle } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
@@ -7,14 +5,16 @@ import { Input } from "@/shared/components/ui/input"
 import { UserHeader } from "./user-header"
 import { EvolutionChartFull } from "./evolution-chart-full"
 import type { Essay } from "@/shared/lib/types"
+import type { User } from "firebase/auth"
 
 interface EssaysHistoryPageProps {
   essays: Essay[]
   onSelectEssay: (essay: Essay) => void
   onOpenChat: () => void
+  user: User | null
 }
 
-export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat }: EssaysHistoryPageProps) {
+export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat, user }: EssaysHistoryPageProps) {
   const [searchQuery, setSearchQuery] = useState("")
 
   const filteredEssays = essays.filter((essay) => essay.title.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -34,7 +34,7 @@ export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat }: EssaysH
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden">
-      <UserHeader />
+      <UserHeader user={user} />
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-6xl mx-auto px-6 py-8">

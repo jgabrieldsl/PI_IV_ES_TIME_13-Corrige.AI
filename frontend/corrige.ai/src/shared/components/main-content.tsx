@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { UserHeader } from "./user-header"
 import { WelcomeSection } from "./welcome-section"
@@ -8,16 +6,18 @@ import { EssayInput } from "./essay-input"
 import { CorrectionPanel } from "./correction-panel"
 import { CorrectionLoading } from "./correction-loading"
 import type { CompetencyResult, CorrectionResult } from "@/shared/lib/types"
+import type { User } from "firebase/auth"
 
 interface MainContentProps {
   onOpenChat: () => void
   hasCorrection: boolean
   onCorrectionComplete: (essayText: string, correction: CorrectionResult) => void
+  user: User | null
 }
 
 type ViewState = "input" | "loading" | "correction"
 
-export function MainContent({ onOpenChat, hasCorrection, onCorrectionComplete }: MainContentProps) {
+export function MainContent({ onOpenChat, hasCorrection, onCorrectionComplete, user }: MainContentProps) {
   const [viewState, setViewState] = useState<ViewState>("input")
   const [essayText, setEssayText] = useState("")
   const [correctionData, setCorrectionData] = useState<CorrectionResult | null>(null)
@@ -49,7 +49,7 @@ export function MainContent({ onOpenChat, hasCorrection, onCorrectionComplete }:
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden">
-      <UserHeader />
+      <UserHeader user={user} />
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto px-6 py-8">

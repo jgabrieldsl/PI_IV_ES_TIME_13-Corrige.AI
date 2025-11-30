@@ -1,5 +1,3 @@
-"use client"
-
 import { Progress } from "@/shared/components/ui/progress"
 
 const competencies = [
