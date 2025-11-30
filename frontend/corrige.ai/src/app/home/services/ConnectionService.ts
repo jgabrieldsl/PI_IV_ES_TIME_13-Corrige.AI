@@ -10,20 +10,12 @@ export class ConnectionService {
   }
 
   async createConnection(connectionData: ConnectionRequest): Promise<ConnectionResponse> {
-    try {
-      const data = await this.apiService.post<ConnectionResponse>(`/api/connect`, connectionData)
-      
-      return data as ConnectionResponse
-    } catch (error) {
-      throw error
-    }
+    const data = await this.apiService.post<ConnectionResponse>(`/api/connect`, connectionData)
+
+    return data as ConnectionResponse
   }
 
   async disconnect(socketId: string): Promise<void> {
-    try {
-      await this.apiService.delete(`/api/connections/${socketId}`)
-    } catch (error) {
-      throw error
-    }
+    await this.apiService.delete(`/api/connections/${socketId}`)
   }
 }
