@@ -25,7 +25,7 @@ export const useAuthController = create<IAuthController>()((set) => {
             try {
                 const user = await authService.login(credentials)
                 set({ user, loading: false })
-            } catch (error: any) {
+            } catch (error) {
                 set({
                     error: "Falha ao fazer login. Verifique suas credenciais.",
                     loading: false
@@ -39,7 +39,7 @@ export const useAuthController = create<IAuthController>()((set) => {
             try {
                 const user = await authService.signup(credentials)
                 set({ user, loading: false })
-            } catch (error: any) {
+            } catch (error) {
                 set({
                     error: "Falha ao criar conta. Tente novamente.",
                     loading: false
@@ -53,7 +53,7 @@ export const useAuthController = create<IAuthController>()((set) => {
             try {
                 await authService.logout()
                 set({ user: null, loading: false })
-            } catch (error: any) {
+            } catch {
                 set({
                     error: "Falha ao sair.",
                     loading: false
