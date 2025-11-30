@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { X, Send, GraduationCap } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
@@ -94,9 +92,8 @@ export function ProfessorChat({ isOpen, onClose }: ProfessorChatProps) {
               </Avatar>
             )}
             <div
-              className={`max-w-[80%] rounded-xl p-3 ${
-                message.role === "user" ? "gradient-ai text-white" : "glass-subtle"
-              }`}
+              className={`max-w-[80%] rounded-xl p-3 ${message.role === "user" ? "gradient-ai text-white" : "glass-subtle"
+                }`}
             >
               <p className="text-sm leading-relaxed">{message.content}</p>
               <p className={`text-[10px] mt-1 ${message.role === "user" ? "text-white/70" : "text-muted-foreground"}`}>

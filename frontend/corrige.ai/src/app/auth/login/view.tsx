@@ -1,58 +1,33 @@
-"use client"
-
-import type React from "react"
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles } from "lucide-react"
-import { signInWithEmailAndPassword } from "firebase/auth"
-import { auth } from "@/shared/lib/firebase"
 
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
 import { Label } from "@/shared/components/ui/label"
 import { Checkbox } from "@/shared/components/ui/checkbox"
 import { useToast } from "@/shared/hooks/use-toast"
+import { getAuthErrorMessage } from "../utils/auth-error"
+import { useLogin } from "../hooks/useLogin"
+import { useEffect } from "react"
 
 export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const navigate = useNavigate()
+    const { form, handleLogin, loading, error, clearError } = useLogin()
+    const { register, formState: { errors } } = form
     const { toast } = useToast()
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsLoading(true)
-
-        try {
-            await signInWithEmailAndPassword(auth, email, password)
-            toast({
-                title: "Login realizado com sucesso!",
-                description: "Bem-vindo de volta ao Corrige.AI",
-            })
-            navigate("/")
-        } catch (error: any) {
-            console.error("Login error:", error)
-            let errorMessage = "Ocorreu um erro ao fazer login."
-
-            if (error.code === 'auth/invalid-credential') {
-                errorMessage = "E-mail ou senha incorretos."
-            } else if (error.code === 'auth/user-not-found') {
-                errorMessage = "Usuário não encontrado."
-            } else if (error.code === 'auth/wrong-password') {
-                errorMessage = "Senha incorreta."
-            }
-
+    useEffect(() => {
+        if (error) {
+            const errorMessage = getAuthErrorMessage(error)
             toast({
                 variant: "destructive",
                 title: "Erro no login",
                 description: errorMessage,
             })
-        } finally {
-            setIsLoading(false)
+            clearError()
         }
-    }
+    }, [error, toast, clearError])
 
     return (
         <div className="min-h-screen flex">
@@ -115,7 +90,7 @@ export default function LoginPage() {
                         <p className="mt-2 text-muted-foreground">Entre na sua conta para continuar</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form onSubmit={handleLogin} className="space-y-5">
                         <div className="space-y-2">
                             <Label htmlFor="email" className="text-sm font-medium">
                                 E-mail
@@ -126,12 +101,13 @@ export default function LoginPage() {
                                     id="email"
                                     type="email"
                                     placeholder="seu@email.com"
-                                    className="pl-10 h-11"
-                                    required
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    className={`pl-10 h-11 ${errors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                                    {...register("email")}
                                 />
                             </div>
+                            {errors.email && (
+                                <p className="text-sm text-destructive">{errors.email.message}</p>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -152,10 +128,8 @@ export default function LoginPage() {
                                     id="password"
                                     type={showPassword ? "text" : "password"}
                                     placeholder="••••••••"
-                                    className="pl-10 pr-10 h-11"
-                                    required
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    className={`pl-10 pr-10 h-11 ${errors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                                    {...register("password")}
                                 />
                                 <button
                                     type="button"
@@ -166,6 +140,9 @@ export default function LoginPage() {
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
                             </div>
+                            {errors.password && (
+                                <p className="text-sm text-destructive">{errors.password.message}</p>
+                            )}
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -175,8 +152,8 @@ export default function LoginPage() {
                             </Label>
                         </div>
 
-                        <Button type="submit" className="w-full h-11 font-medium" disabled={isLoading}>
-                            {isLoading ? (
+                        <Button type="submit" className="w-full h-11 font-medium" disabled={loading}>
+                            {loading ? (
                                 <span className="flex items-center gap-2">
                                     <span className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                                     Entrando...

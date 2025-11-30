@@ -5,7 +5,7 @@ import type { LoginCredentials, SignupCredentials, AuthUser } from '../models'
 interface IAuthController {
     user: AuthUser | null
     loading: boolean
-    error: string | null
+    error: any | null
     login: (credentials: LoginCredentials) => Promise<void>
     signup: (credentials: SignupCredentials) => Promise<void>
     logout: () => Promise<void>
@@ -26,8 +26,9 @@ export const useAuthController = create<IAuthController>()((set) => {
                 const user = await authService.login(credentials)
                 set({ user, loading: false })
             } catch (error) {
+                console.error("AuthController login error:", error)
                 set({
-                    error: "Falha ao fazer login. Verifique suas credenciais.",
+                    error: error,
                     loading: false
                 })
                 throw error
@@ -40,8 +41,9 @@ export const useAuthController = create<IAuthController>()((set) => {
                 const user = await authService.signup(credentials)
                 set({ user, loading: false })
             } catch (error) {
+                console.error("AuthController signup error:", error)
                 set({
-                    error: "Falha ao criar conta. Tente novamente.",
+                    error: error,
                     loading: false
                 })
                 throw error
@@ -53,9 +55,9 @@ export const useAuthController = create<IAuthController>()((set) => {
             try {
                 await authService.logout()
                 set({ user: null, loading: false })
-            } catch {
+            } catch (error) {
                 set({
-                    error: "Falha ao sair.",
+                    error: error,
                     loading: false
                 })
             }

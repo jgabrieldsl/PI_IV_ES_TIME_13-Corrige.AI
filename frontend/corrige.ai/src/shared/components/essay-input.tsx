@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { Paperclip, Mic, Sparkles, Send, ChevronDown } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
@@ -67,9 +65,8 @@ export function EssayInput({
                     onThemeChange(item.value)
                     setIsThemeOpen(false)
                   }}
-                  className={`w-full px-4 py-3 text-left text-sm hover:bg-secondary/60 transition-colors ${
-                    theme === item.value ? "bg-secondary text-foreground" : "text-foreground"
-                  }`}
+                  className={`w-full px-4 py-3 text-left text-sm hover:bg-secondary/60 transition-colors ${theme === item.value ? "bg-secondary text-foreground" : "text-foreground"
+                    }`}
                 >
                   {item.label}
                 </button>

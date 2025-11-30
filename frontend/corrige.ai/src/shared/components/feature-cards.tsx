@@ -1,5 +1,3 @@
-"use client"
-
 import { PenLine, BarChart3, MessageCircle, BookOpen, Plus, Lock } from "lucide-react"
 
 interface FeatureCardsProps {
@@ -52,9 +50,8 @@ export function FeatureCards({ hasCorrection, onOpenChat }: FeatureCardsProps) {
             key={index}
             onClick={feature.isChat && !isDisabled ? onOpenChat : undefined}
             disabled={isDisabled}
-            className={`glass-subtle rounded-xl p-4 text-left transition-all duration-200 group relative overflow-hidden ${
-              isDisabled ? "opacity-60 cursor-not-allowed" : "hover:bg-secondary/60"
-            }`}
+            className={`glass-subtle rounded-xl p-4 text-left transition-all duration-200 group relative overflow-hidden ${isDisabled ? "opacity-60 cursor-not-allowed" : "hover:bg-secondary/60"
+              }`}
           >
             {feature.isChat && isDisabled && (
               <div className="absolute top-3 right-3">

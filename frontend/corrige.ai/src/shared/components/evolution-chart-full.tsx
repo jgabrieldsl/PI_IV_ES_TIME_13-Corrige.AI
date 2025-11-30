@@ -1,5 +1,3 @@
-"use client"
-
 import { TrendingUp, TrendingDown } from "lucide-react"
 import type { Essay } from "@/shared/lib/types"
 
@@ -74,9 +72,8 @@ export function EvolutionChartFull({ essays }: EvolutionChartFullProps) {
 
               <div className="w-full h-48 flex items-end">
                 <div
-                  className={`w-full rounded-t-lg transition-all duration-500 cursor-pointer hover:opacity-80 ${
-                    isLast ? "gradient-ai" : "bg-foreground/30"
-                  }`}
+                  className={`w-full rounded-t-lg transition-all duration-500 cursor-pointer hover:opacity-80 ${isLast ? "gradient-ai" : "bg-foreground/30"
+                    }`}
                   style={{ height: `${height}%` }}
                 />
               </div>

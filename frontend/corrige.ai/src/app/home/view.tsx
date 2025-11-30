@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { Sidebar } from "@/shared/components/sidebar"
 import { MainContent } from "@/shared/components/main-content"
@@ -7,6 +5,7 @@ import { EssaysHistoryPage } from "@/shared/components/essays-history-page"
 import { EssayDetailPanel } from "@/shared/components/essay-detail-panel"
 import { ProfessorChat } from "@/shared/components/professor-chat"
 import { mockEssays, type Essay, type CorrectionResult, type AppView } from "@/shared/lib/types"
+import { useAuth } from "@/app/auth/contexts/auth-context"
 
 export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -14,6 +13,8 @@ export default function Home() {
   const [currentView, setCurrentView] = useState<AppView>("home")
   const [selectedEssay, setSelectedEssay] = useState<Essay | null>(null)
   const [essays, setEssays] = useState<Essay[]>(mockEssays)
+
+  const { user } = useAuth()
 
   const handleSelectEssay = (essay: Essay) => {
     setSelectedEssay(essay)
@@ -39,6 +40,7 @@ export default function Home() {
         onNavigate={setCurrentView}
         essays={essays}
         onSelectEssay={handleSelectEssay}
+        user={user}
       />
 
       {currentView === "home" && (
@@ -46,11 +48,17 @@ export default function Home() {
           onOpenChat={() => setIsChatOpen(true)}
           hasCorrection={hasCorrection}
           onCorrectionComplete={handleNewEssayComplete}
+          user={user}
         />
       )}
 
       {currentView === "history" && (
-        <EssaysHistoryPage essays={essays} onSelectEssay={handleSelectEssay} onOpenChat={() => setIsChatOpen(true)} />
+        <EssaysHistoryPage
+          essays={essays}
+          onSelectEssay={handleSelectEssay}
+          onOpenChat={() => setIsChatOpen(true)}
+          user={user}
+        />
       )}
 
       {currentView === "essay-detail" && selectedEssay && (
@@ -58,6 +66,7 @@ export default function Home() {
           essay={selectedEssay}
           onBack={() => setCurrentView("history")}
           onOpenChat={() => setIsChatOpen(true)}
+          user={user}
         />
       )}
 
