@@ -7,6 +7,8 @@ import SignupPage from './auth/signup/view'
 import Home from './home'
 
 
+import { ProtectedRoute } from '@/shared/components/auth/protected-route'
+
 const ROUTES = {
   not_found: '/*',
   login: '/auth/login',
@@ -18,7 +20,11 @@ export function Router() {
     <Routes>
       <Route
         index
-        element={<Home />}
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
       />
       <Route
         path={ROUTES.login}

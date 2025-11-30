@@ -1,3 +1,5 @@
+export type AppView = "home" | "history" | "essay-detail"
+
 export interface CompetencyResult {
   id: number
   name: string

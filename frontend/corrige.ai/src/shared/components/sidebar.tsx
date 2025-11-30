@@ -5,8 +5,7 @@ import { Button } from "@/shared/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar"
 import { Badge } from "@/shared/components/ui/badge"
 import { ThemeToggle } from "@/shared/components/theme-toggle"
-import type { AppView } from "./dashboard"
-import type { Essay } from "@/shared/lib/types"
+import type { Essay, AppView } from "@/shared/lib/types"
 
 interface SidebarProps {
   currentView: AppView
@@ -48,22 +47,20 @@ export function Sidebar({ currentView, onNavigate, essays, onSelectEssay }: Side
         <nav className="space-y-1">
           <button
             onClick={() => onNavigate("home")}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-              currentView === "home"
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${currentView === "home"
                 ? "bg-secondary text-foreground"
                 : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent"
-            }`}
+              }`}
           >
             <Home className="w-4 h-4 shrink-0" />
             <span className="flex-1 text-left">Inicio</span>
           </button>
           <button
             onClick={() => onNavigate("history")}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-              currentView === "history" || currentView === "essay-detail"
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${currentView === "history" || currentView === "essay-detail"
                 ? "bg-secondary text-foreground"
                 : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent"
-            }`}
+              }`}
           >
             <History className="w-4 h-4 shrink-0" />
             <span className="flex-1 text-left">Historico</span>
