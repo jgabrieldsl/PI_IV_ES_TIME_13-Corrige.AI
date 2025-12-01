@@ -47,22 +47,19 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
         <div className="max-w-4xl mx-auto px-6 py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <Button variant="ghost" onClick={onBack} className="rounded-xl hover:bg-secondary">
+            <Button variant="ghost" onClick={onBack} className="rounded-xl hover:bg-secondary cursor-pointer">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar ao Histórico
             </Button>
             <Button onClick={onOpenChat} className="rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground">
               <MessageCircle className="w-4 h-4 mr-2" />
-              Falar com Professor
+              Falar com o professor
             </Button>
           </div>
 
           {/* Essay Info Card */}
           <div className="glass rounded-3xl p-6 mb-6">
             <div className="flex items-start gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center shrink-0">
-                <FileText className="w-7 h-7 text-primary" />
-              </div>
               <div className="flex-1 min-w-0">
                 <h1 className="text-xl font-bold text-foreground mb-2">{essay.title}</h1>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -70,7 +67,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
                     <Calendar className="w-4 h-4" />
                     {formatDate(essay.date)}
                   </span>
-                  <span>{essay.text.split(/\s+/).length} palavras</span>
                 </div>
               </div>
               <div className="text-right">
@@ -84,11 +80,8 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
           <div className="glass rounded-3xl p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center">
-                  <Award className="w-6 h-6 text-primary" />
-                </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-foreground">Nota Final</h2>
+                  <h2 className="text-lg font-semibold text-foreground">Nota final</h2>
                   <p className="text-sm text-muted-foreground">Baseada nas 5 competências do ENEM</p>
                 </div>
               </div>
@@ -99,7 +92,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
           {/* General Feedback */}
           <div className="glass rounded-3xl p-6 mb-6">
             <div className="flex items-center gap-2 mb-4">
-              <Lightbulb className="w-5 h-5 text-amber-400" />
               <h3 className="font-semibold text-foreground">Feedback Geral</h3>
             </div>
             <p className="text-muted-foreground leading-relaxed">{correction.generalFeedback}</p>
@@ -170,7 +162,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
           {/* Essay Preview */}
           <div className="glass rounded-3xl p-6 mb-6">
             <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-5 h-5 text-primary" />
               <h3 className="font-semibold text-foreground">Sua Redação</h3>
             </div>
             <div className="bg-muted/30 rounded-2xl p-4 max-h-80 overflow-y-auto">

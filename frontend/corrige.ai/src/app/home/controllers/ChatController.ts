@@ -61,7 +61,7 @@ export const useChatController = create<IChatController>()((set, get) => {
       try {
         const { currentUserId } = get()
 
-        // Adiciona a mensagem localmente primeiro (otimistic update)
+        // Adiciona a mensagem localmente primeiro
         const localMessage: ChatMessage = {
           userId: currentUserId,
           userType: 'STUDENT',
@@ -76,7 +76,6 @@ export const useChatController = create<IChatController>()((set, get) => {
         // Envia para o servidor
         await chatService.sendMessage({ socketId, mensagem })
       } catch (error) {
-        console.error('Erro ao enviar mensagem:', error)
         throw error
       }
     },

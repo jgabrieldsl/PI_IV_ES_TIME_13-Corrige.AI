@@ -15,19 +15,27 @@ public class Redacao {
     private Integer pontuacaoTotal; 
     private String feedbackGeral; 
     private List<CompetenciaDetalheDTO> detalhesCompetencias; 
+    private String titulo;
+    private String tema;
+    private List<String> pontosFortes;
+    private List<String> pontosMelhoria;
     private Date dataEnvio; 
     private String userId;
 
     public Redacao() {}
     
     
-    public Redacao(String userId, String conteudo, String status, Integer pontuacaoTotal, String feedbackGeral, List<CompetenciaDetalheDTO> detalhesCompetencias) {
+    public Redacao(String userId, String conteudo, String titulo, String tema, String status, Integer pontuacaoTotal, String feedbackGeral, List<CompetenciaDetalheDTO> detalhesCompetencias, List<String> pontosFortes, List<String> pontosMelhoria) {
         this.userId = userId;
         this.conteudo = conteudo;
+        this.titulo = titulo;
+        this.tema = tema;
         this.status = status;
         this.pontuacaoTotal = pontuacaoTotal;
         this.feedbackGeral = feedbackGeral;
         this.detalhesCompetencias = detalhesCompetencias;
+        this.pontosFortes = pontosFortes;
+        this.pontosMelhoria = pontosMelhoria;
         this.dataEnvio = new Date(); 
     }
 
@@ -36,6 +44,12 @@ public class Redacao {
 
     public String getConteudo() { return conteudo; }
     public void setConteudo(String conteudo) { this.conteudo = conteudo; }
+
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+
+    public String getTema() { return tema; }
+    public void setTema(String tema) { this.tema = tema; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
@@ -48,6 +62,12 @@ public class Redacao {
     
     public List<CompetenciaDetalheDTO> getDetalhesCompetencias() { return detalhesCompetencias; }
     public void setDetalhesCompetencias(List<CompetenciaDetalheDTO> detalhesCompetencias) { this.detalhesCompetencias = detalhesCompetencias; }
+
+    public List<String> getPontosFortes() { return pontosFortes; }
+    public void setPontosFortes(List<String> pontosFortes) { this.pontosFortes = pontosFortes; }
+
+    public List<String> getPontosMelhoria() { return pontosMelhoria; }
+    public void setPontosMelhoria(List<String> pontosMelhoria) { this.pontosMelhoria = pontosMelhoria; }
 
     public Date getDataEnvio() { return dataEnvio; }
     public void setDataEnvio(Date dataEnvio) { this.dataEnvio = dataEnvio; }

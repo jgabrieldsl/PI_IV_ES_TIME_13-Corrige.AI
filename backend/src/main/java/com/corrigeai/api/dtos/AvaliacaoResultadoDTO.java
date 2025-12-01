@@ -14,13 +14,21 @@ public class AvaliacaoResultadoDTO {
     @JsonProperty("detalhamento_competencias")
     private List<CompetenciaDetalheDTO> detalhamentoCompetencias;
 
+    @JsonProperty("pontos_fortes")
+    private List<String> pontosFortes;
+
+    @JsonProperty("pontos_melhoria")
+    private List<String> pontosMelhoria;
+
     
     public AvaliacaoResultadoDTO() {}
 
-    public AvaliacaoResultadoDTO(Integer pontuacaoTotal, String feedbackGeral, List<CompetenciaDetalheDTO> detalhamentoCompetencias) {
+    public AvaliacaoResultadoDTO(Integer pontuacaoTotal, String feedbackGeral, List<CompetenciaDetalheDTO> detalhamentoCompetencias, List<String> pontosFortes, List<String> pontosMelhoria) {
         this.pontuacaoTotal = pontuacaoTotal;
         this.feedbackGeral = feedbackGeral;
         this.detalhamentoCompetencias = detalhamentoCompetencias;
+        this.pontosFortes = pontosFortes;
+        this.pontosMelhoria = pontosMelhoria;
     }
  
     public Integer getPontuacaoTotal() { return pontuacaoTotal; }
@@ -31,4 +39,10 @@ public class AvaliacaoResultadoDTO {
 
     public List<CompetenciaDetalheDTO> getDetalhamentoCompetencias() { return detalhamentoCompetencias; }
     public void setDetalhamentoCompetencias(List<CompetenciaDetalheDTO> detalhamentoCompetencias) { this.detalhamentoCompetencias = detalhamentoCompetencias; }
+
+    public List<String> getPontosFortes() { return pontosFortes; }
+    public void setPontosFortes(List<String> pontosFortes) { this.pontosFortes = pontosFortes; }
+
+    public List<String> getPontosMelhoria() { return pontosMelhoria; }
+    public void setPontosMelhoria(List<String> pontosMelhoria) { this.pontosMelhoria = pontosMelhoria; }
 }

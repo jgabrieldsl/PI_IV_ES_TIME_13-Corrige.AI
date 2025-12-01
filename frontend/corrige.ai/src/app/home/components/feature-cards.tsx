@@ -23,12 +23,12 @@ export function FeatureCards({ hasCorrection, onOpenChat }: FeatureCardsProps) {
     },
     {
       icon: MessageCircle,
-      title: "Falar com Professor",
+      title: "Falar com o professor",
       description: hasCorrection ? "Tire duvidas em tempo real." : "Disponivel apos correcao.",
       color: hasCorrection ? "text-foreground" : "text-muted-foreground",
       bgColor: hasCorrection ? "bg-secondary" : "bg-muted/50",
-      isChat: true,
       disabled: !hasCorrection,
+      action: onOpenChat,
     },
     {
       icon: BookOpen,
@@ -48,19 +48,19 @@ export function FeatureCards({ hasCorrection, onOpenChat }: FeatureCardsProps) {
         return (
           <button
             key={index}
-            onClick={feature.isChat && !isDisabled ? onOpenChat : undefined}
+            onClick={feature.action && !isDisabled ? feature.action : undefined}
             disabled={isDisabled}
             className={`glass-subtle rounded-xl p-4 text-left transition-all duration-200 group relative overflow-hidden ${isDisabled ? "opacity-60 cursor-not-allowed" : "hover:bg-secondary/60"
               }`}
           >
-            {feature.isChat && isDisabled && (
+            {feature.disabled && feature.title === "Falar com o professor" && (
               <div className="absolute top-3 right-3">
                 <Lock className="w-4 h-4 text-muted-foreground" />
               </div>
             )}
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3 mb-2">
-                <div className={`w-8 h-8 rounded-lg ${feature.bgColor} flex items-center justify-center`}>
+                <div className={`w-8 h-8 rounded-sm ${feature.bgColor} flex items-center justify-center`}>
                   <Icon className={`w-4 h-4 ${feature.color}`} />
                 </div>
               </div>

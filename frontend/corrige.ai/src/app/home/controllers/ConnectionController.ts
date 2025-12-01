@@ -34,7 +34,6 @@ export const useConnectionController = create<IConnection>()((set, get) => {
         })
 
       } catch {
-        console.error('Um erro ocorreu')
         set({ isConnecting: false })
       }
     },

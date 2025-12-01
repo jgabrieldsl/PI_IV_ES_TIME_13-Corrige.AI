@@ -25,7 +25,6 @@ export function UserHeader({ user }: UserHeaderProps) {
         description: "Você saiu da sua conta com sucesso.",
       })
     } catch (error) {
-      console.error("Logout error:", error)
       toast({
         variant: "destructive",
         title: "Erro ao sair",

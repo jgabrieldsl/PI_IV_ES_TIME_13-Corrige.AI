@@ -17,13 +17,8 @@ export const useLogin = () => {
     })
 
     const handleLogin = async (credentials: LoginCredentials) => {
-        try {
-            await login(credentials)
-            navigate('/')
-        } catch (error) {
-            // Error is handled by AuthController state
-            console.error("Login failed:", error)
-        }
+        await login(credentials)
+        navigate('/')
     }
 
     return {

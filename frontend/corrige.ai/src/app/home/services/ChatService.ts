@@ -14,7 +14,8 @@ export class ChatService {
 
   // Conecta ao stream SSE de mensagens
   connectToMessageStream(socketId: string, onMessage: (message: ChatMessage) => void): EventSource {
-    const eventSource = new EventSource(`http://localhost:8080/api/chat/stream/${socketId}`)
+    const baseUrl = import.meta.env.VITE_API_BASE_URL
+    const eventSource = new EventSource(`${baseUrl}/api/chat/stream/${socketId}`)
 
     eventSource.addEventListener('chat-message', (event) => {
       const message: ChatMessage = JSON.parse(event.data)
