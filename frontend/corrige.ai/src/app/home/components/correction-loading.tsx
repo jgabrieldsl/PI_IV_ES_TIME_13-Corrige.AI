@@ -9,7 +9,7 @@ const steps = [
 ]
 
 export function CorrectionLoading() {
-  const [currentStep, setCurrentStep] = useState(0)
+  const [ currentStep, setCurrentStep ] = useState(0)
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = []

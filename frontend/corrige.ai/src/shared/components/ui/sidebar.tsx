@@ -65,11 +65,11 @@ function SidebarProvider({
   onOpenChange?: (open: boolean) => void
 }) {
   const isMobile = useIsMobile()
-  const [openMobile, setOpenMobile] = React.useState(false)
+  const [ openMobile, setOpenMobile ] = React.useState(false)
 
   // Este é o estado interno da barra lateral.
   // Usamos openProp e setOpenProp para controle de fora do componente.
-  const [_open, _setOpen] = React.useState(defaultOpen)
+  const [ _open, _setOpen ] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
@@ -83,13 +83,13 @@ function SidebarProvider({
       // Isso define o cookie para manter o estado da barra lateral.
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
     },
-    [setOpenProp, open],
+    [ setOpenProp, open ],
   )
 
   // Auxiliar para alternar a barra lateral.
   const toggleSidebar = React.useCallback(() => {
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
-  }, [isMobile, setOpen, setOpenMobile])
+  }, [ isMobile, setOpen, setOpenMobile ])
 
   // Adiciona um atalho de teclado para alternar a barra lateral.
   React.useEffect(() => {
@@ -105,7 +105,7 @@ function SidebarProvider({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [toggleSidebar])
+  }, [ toggleSidebar ])
 
   // Adicionamos um estado para que possamos fazer data-state="expanded" ou "collapsed".
   // Isso facilita o estilo da barra lateral com classes Tailwind.
@@ -121,7 +121,7 @@ function SidebarProvider({
       setOpenMobile,
       toggleSidebar,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
+    [ state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar ],
   )
 
   return (

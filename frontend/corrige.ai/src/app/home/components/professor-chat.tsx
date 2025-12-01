@@ -15,8 +15,8 @@ interface ProfessorChatProps {
 }
 
 export function ProfessorChat({ isOpen, onClose }: ProfessorChatProps) {
-  const [input, setInput] = useState("")
-  const [isTeacherMode, setIsTeacherMode] = useState(false)
+  const [ input, setInput ] = useState("")
+  const [ isTeacherMode, setIsTeacherMode ] = useState(false)
   const { user } = useAuth()
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -43,7 +43,7 @@ export function ProfessorChat({ isOpen, onClose }: ProfessorChatProps) {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
     }
-  }, [messages])
+  }, [ messages ])
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -58,7 +58,7 @@ export function ProfessorChat({ isOpen, onClose }: ProfessorChatProps) {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
-  }, [isConnected, disconnectFromChat, disconnect])
+  }, [ isConnected, disconnectFromChat, disconnect ])
 
   const handleConnect = async () => {
     if (!user) return
@@ -88,7 +88,7 @@ export function ProfessorChat({ isOpen, onClose }: ProfessorChatProps) {
     if (connection?.dados?.socketId && !isChatConnected) {
       connectToChat(connection.dados.socketId)
     }
-  }, [connection, isChatConnected, connectToChat])
+  }, [ connection, isChatConnected, connectToChat ])
 
   const handleDisconnect = async () => {
     disconnectFromChat()

@@ -62,7 +62,7 @@ export const useChatController = create<IChatController>()((set, get) => {
 
         if (String(message.userId) !== String(currentUserId)) {
           set((state) => ({
-            messages: [...state.messages, message]
+            messages: [ ...state.messages, message ]
           }))
         }
       })
@@ -86,7 +86,7 @@ export const useChatController = create<IChatController>()((set, get) => {
       }
 
       set((state) => ({
-        messages: [...state.messages, localMessage]
+        messages: [ ...state.messages, localMessage ]
       }))
 
       // Envia para o servidor

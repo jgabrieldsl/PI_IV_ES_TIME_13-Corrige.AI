@@ -6,8 +6,8 @@ import { auth } from "@/shared/lib/firebase"
 import type { User } from "firebase/auth"
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-    const [loading, setLoading] = useState(true)
-    const [user, setUser] = useState<User | null>(null)
+    const [ loading, setLoading ] = useState(true)
+    const [ user, setUser ] = useState<User | null>(null)
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {

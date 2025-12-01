@@ -68,7 +68,7 @@ function ChartContainer({
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
-    ([, config]) => config.theme || config.color,
+    ([ , config ]) => config.theme || config.color,
   )
 
   if (!colorConfig.length) {
@@ -80,10 +80,10 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(
-            ([theme, prefix]) => `
+            ([ theme, prefix ]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
-                .map(([key, itemConfig]) => {
+                .map(([ key, itemConfig ]) => {
                   const color =
                     itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
                     itemConfig.color
@@ -133,7 +133,7 @@ function ChartTooltipContent({
       return null
     }
 
-    const [item] = payload
+    const [ item ] = payload
     const key = `${labelKey || item?.dataKey || item?.name || 'value'}`
     const itemConfig = getPayloadConfigFromPayload(config, item, key)
     const value =

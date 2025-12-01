@@ -12,7 +12,7 @@ import { useLogin } from "../hooks/useLogin"
 import { useEffect } from "react"
 
 export default function LoginPage() {
-    const [showPassword, setShowPassword] = useState(false)
+    const [ showPassword, setShowPassword ] = useState(false)
     const { form, handleLogin, loading, error, clearError } = useLogin()
     const { register, formState: { errors } } = form
     const { toast } = useToast()
@@ -27,7 +27,7 @@ export default function LoginPage() {
             })
             clearError()
         }
-    }, [error, toast, clearError])
+    }, [ error, toast, clearError ])
 
     return (
         <div className="min-h-screen flex">

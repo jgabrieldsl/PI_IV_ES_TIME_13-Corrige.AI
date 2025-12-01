@@ -13,7 +13,7 @@ import { useRegister } from "../hooks/useRegister"
 import { useEffect } from "react"
 
 export default function RegisterPage() {
-    const [showPassword, setShowPassword] = useState(false)
+    const [ showPassword, setShowPassword ] = useState(false)
     const { form, handleRegister, loading, error, clearError } = useRegister()
     const { register, control, watch, formState: { errors } } = form
     const { toast } = useToast()
@@ -36,7 +36,7 @@ export default function RegisterPage() {
             })
             clearError()
         }
-    }, [error, toast, clearError])
+    }, [ error, toast, clearError ])
 
     return (
         <div className="min-h-screen flex">
@@ -80,7 +80,7 @@ export default function RegisterPage() {
 
                     <div className="flex items-center gap-4">
                         <div className="flex -space-x-2">
-                            {[1, 2, 3, 4].map((i) => (
+                            {[ 1, 2, 3, 4 ].map((i) => (
                                 <div
                                     key={i}
                                     className="w-8 h-8 rounded-full bg-background/30 border-2 border-foreground flex items-center justify-center text-xs text-background font-medium"
@@ -198,11 +198,11 @@ export default function RegisterPage() {
                                 />
                                 <Label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer leading-relaxed">
                                     Eu concordo com os{" "}
-                                    <Link to="/terms" className="text-foreground hover:underline">
+                                    <Link to="#" className="text-foreground hover:underline">
                                         Termos de Uso
                                     </Link>{" "}
                                     e{" "}
-                                    <Link to="/privacy" className="text-foreground hover:underline">
+                                    <Link to="#" className="text-foreground hover:underline">
                                         Política de Privacidade
                                     </Link>
                                 </Label>

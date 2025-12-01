@@ -6,7 +6,7 @@ interface EvolutionChartFullProps {
 }
 
 export function EvolutionChartFull({ essays }: EvolutionChartFullProps) {
-  const sortedEssays = [...essays].sort((a, b) => a.date.getTime() - b.date.getTime()).slice(-10)
+  const sortedEssays = [ ...essays ].sort((a, b) => a.date.getTime() - b.date.getTime()).slice(-10)
 
   const chartData = sortedEssays.map((essay, index) => ({
     label: `R${index + 1}`,

@@ -16,9 +16,9 @@ interface EssaysHistoryPageProps {
 }
 
 export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHistoryPageProps) {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [essays, setEssays] = useState<Essay[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [ searchQuery, setSearchQuery ] = useState("")
+  const [ essays, setEssays ] = useState<Essay[]>([])
+  const [ isLoading, setIsLoading ] = useState(true)
   const { toast } = useToast()
 
   const loadEssays = useCallback(async () => {
@@ -37,13 +37,13 @@ export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHis
     } finally {
       setIsLoading(false)
     }
-  }, [user, toast])
+  }, [ user, toast ])
 
   useEffect(() => {
     if (user) {
       loadEssays()
     }
-  }, [user, loadEssays])
+  }, [ user, loadEssays ])
 
   const filteredEssays = essays.filter((essay) => essay.title.toLowerCase().includes(searchQuery.toLowerCase()))
 

@@ -18,8 +18,8 @@ const AuthContext = createContext<AuthContextType>({
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [ user, setUser ] = useState<User | null>(null);
+    const [ loading, setLoading ] = useState(true);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         user,
         loading,
         signOut
-    }), [user, loading]);
+    }), [ user, loading ]);
 
     return (
         <AuthContext.Provider value={value}>
