@@ -38,7 +38,6 @@ export const useChatController = create<IChatController>()((set, get) => {
     },
 
     connectToChat: (socketId: string) => {
-      console.log('[ChatController] Connecting to chat with socketId:', socketId)
       const { eventSource } = get()
 
       // Fecha conexão anterior se existir
@@ -50,10 +49,6 @@ export const useChatController = create<IChatController>()((set, get) => {
       const newEventSource = chatService.connectToMessageStream(socketId, (message) => {
         const { currentUserId } = get()
 
-        // Só adiciona se não for uma mensagem do próprio usuário
-        // (evita duplicação já que mensagens próprias são adicionadas localmente)
-        console.log('[ChatController] Message received:', message)
-
         const { messages } = get()
         const lastMessage = messages[messages.length - 1]
 
@@ -62,17 +57,13 @@ export const useChatController = create<IChatController>()((set, get) => {
           lastMessage.timestamp === message.timestamp &&
           lastMessage.userId === message.userId &&
           lastMessage.mensagem === message.mensagem) {
-          console.log('[ChatController] Duplicate message detected. Ignoring.')
           return
         }
 
         if (String(message.userId) !== String(currentUserId)) {
-          console.log('[ChatController] Adding message to state (not from self)')
           set((state) => ({
             messages: [...state.messages, message]
           }))
-        } else {
-          console.log('[ChatController] Ignoring message (from self)')
         }
       })
 

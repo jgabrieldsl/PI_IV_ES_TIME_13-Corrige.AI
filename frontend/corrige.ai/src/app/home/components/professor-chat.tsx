@@ -45,24 +45,43 @@ export function ProfessorChat({ isOpen, onClose }: ProfessorChatProps) {
     }
   }, [messages])
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (isConnected) {
+        disconnectFromChat()
+        disconnect()
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [isConnected, disconnectFromChat, disconnect])
+
   const handleConnect = async () => {
     if (!user) return
 
     const userType = isTeacherMode ? 'TEACHER' : 'STUDENT'
 
-    console.log('[ProfessorChat] User object:', user)
-    console.log('[ProfessorChat] Setting currentUserId:', user.uid)
-    setCurrentUserId(user.uid)
-    setCurrentUserType(userType)
+    try {
+      const authToken = await user.getIdToken()
 
-    await setConnection({
-      tipo: 'CONNECT',
-      dados: {
-        userId: user.uid,
-        userType: userType,
-        authToken: 'token-placeholder'
-      }
-    })
+      setCurrentUserId(user.uid)
+      setCurrentUserType(userType)
+
+      await setConnection({
+        tipo: 'CONNECT',
+        dados: {
+          userId: user.uid,
+          userType: userType,
+          authToken: authToken
+        }
+      })
+    } catch (error) {
+      console.error('[ProfessorChat] Failed to get auth token:', error)
+    }
   }
 
   useEffect(() => {
