@@ -11,11 +11,11 @@ import { useTheme } from "@/shared/components/theme-provider"
 import { Aurora } from "@/shared/components/ui/aurora-background"
 
 export default function Home() {
-  const [isChatOpen, setIsChatOpen] = useState(false)
-  const [hasCorrection, setHasCorrection] = useState(false)
-  const [currentView, setCurrentView] = useState<AppView>("home")
-  const [selectedEssay, setSelectedEssay] = useState<Essay | null>(null)
-  const [essays, setEssays] = useState<Essay[]>([])
+  const [ isChatOpen, setIsChatOpen ] = useState(false)
+  const [ hasCorrection, setHasCorrection ] = useState(false)
+  const [ currentView, setCurrentView ] = useState<AppView>("home")
+  const [ selectedEssay, setSelectedEssay ] = useState<Essay | null>(null)
+  const [ essays, setEssays ] = useState<Essay[]>([])
   const { resolvedTheme } = useTheme()
 
   const { user } = useAuth()
@@ -30,13 +30,13 @@ export default function Home() {
         console.error("Failed to load essays", error)
       }
     }
-  }, [user])
+  }, [ user ])
 
   useEffect(() => {
     if (user) {
       loadEssays()
     }
-  }, [user, loadEssays])
+  }, [ user, loadEssays ])
 
   const handleSelectEssay = (essay: Essay) => {
     setSelectedEssay(essay)
@@ -52,7 +52,7 @@ export default function Home() {
     <div className="relative flex h-screen bg-background overflow-hidden">
       {resolvedTheme === "dark" && (
         <Aurora
-          colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
+          colorStops={[ "#3A29FF", "#FF94B4", "#FF3232" ]}
           blend={0.5}
           amplitude={1.0}
           speed={0.5}

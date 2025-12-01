@@ -57,7 +57,7 @@ const fieldVariants = cva(
   {
     variants: {
       orientation: {
-        vertical: ['flex-col [&>*]:w-full [&>.sr-only]:w-auto'],
+        vertical: [ 'flex-col [&>*]:w-full [&>.sr-only]:w-auto' ],
         horizontal: [
           'flex-row items-center',
           '[&>[data-slot=field-label]]:flex-auto',
@@ -210,7 +210,7 @@ function FieldError({
         )}
       </ul>
     )
-  }, [children, errors])
+  }, [ children, errors ])
 
   if (!content) {
     return null

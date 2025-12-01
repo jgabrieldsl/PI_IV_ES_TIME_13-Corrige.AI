@@ -116,7 +116,7 @@ interface AuroraProps {
 }
 
 export function Aurora(props: AuroraProps) {
-    const { colorStops = ['#5227FF', '#7cff67', '#5227FF'], amplitude = 1.0, blend = 0.5 } = props;
+    const { colorStops = [ '#5227FF', '#7cff67', '#5227FF' ], amplitude = 1.0, blend = 0.5 } = props;
     const propsRef = useRef(props);
     propsRef.current = props;
 
@@ -144,7 +144,7 @@ export function Aurora(props: AuroraProps) {
 
         const colorStopsArray = colorStops.map(hex => {
             const c = new Color(hex);
-            return [c.r, c.g, c.b];
+            return [ c.r, c.g, c.b ];
         });
 
         const program = new Program(gl, {
@@ -154,7 +154,7 @@ export function Aurora(props: AuroraProps) {
                 uTime: { value: 0 },
                 uAmplitude: { value: amplitude },
                 uColorStops: { value: colorStopsArray },
-                uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
+                uResolution: { value: [ ctn.offsetWidth, ctn.offsetHeight ] },
                 uBlend: { value: blend }
             }
         });
@@ -164,7 +164,7 @@ export function Aurora(props: AuroraProps) {
             const width = ctn.offsetWidth;
             const height = ctn.offsetHeight;
             renderer.setSize(width, height);
-            program.uniforms.uResolution.value = [width, height];
+            program.uniforms.uResolution.value = [ width, height ];
         }
         window.addEventListener('resize', resize);
 
@@ -181,7 +181,7 @@ export function Aurora(props: AuroraProps) {
             const stops = propsRef.current.colorStops ?? colorStops;
             program.uniforms.uColorStops.value = stops.map((hex: string) => {
                 const c = new Color(hex);
-                return [c.r, c.g, c.b];
+                return [ c.r, c.g, c.b ];
             });
             renderer.render({ scene: mesh });
         };
@@ -199,7 +199,7 @@ export function Aurora(props: AuroraProps) {
             if (ext) ext.loseContext();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [amplitude]);
+    }, [ amplitude ]);
 
     return <div ref={ctnDom} className="w-full h-full absolute inset-0 pointer-events-none z-0" />;
 }

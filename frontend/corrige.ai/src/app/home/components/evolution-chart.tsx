@@ -7,7 +7,7 @@ interface EvolutionChartProps {
 
 export function EvolutionChart({ essays }: EvolutionChartProps) {
   // Ordenar redações por data e pegar as últimas 6
-  const sortedEssays = [...essays].sort((a, b) => a.date.getTime() - b.date.getTime()).slice(-6)
+  const sortedEssays = [ ...essays ].sort((a, b) => a.date.getTime() - b.date.getTime()).slice(-6)
 
   const chartData = sortedEssays.map((essay, index) => ({
     week: `R${index + 1}`, // Usando R1, R2... para Redação 1, 2... já que "Semana" pode não ser preciso
@@ -15,7 +15,7 @@ export function EvolutionChart({ essays }: EvolutionChartProps) {
   }))
 
   const maxScore = 1000
-  const minScore = Math.max(0, Math.min(...(chartData.length > 0 ? chartData.map((d) => d.score) : [0])) - 100)
+  const minScore = Math.max(0, Math.min(...(chartData.length > 0 ? chartData.map((d) => d.score) : [ 0 ])) - 100)
 
   // Calcular tendência com base nas duas últimas redações
   const currentScore = chartData.length > 0 ? chartData[chartData.length - 1].score : 0

@@ -65,7 +65,7 @@ export const reducer = (state: State, action: Action): State => {
     case 'ADD_TOAST':
       return {
         ...state,
-        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
+        toasts: [ action.toast, ...state.toasts ].slice(0, TOAST_LIMIT),
       }
 
     case 'UPDATE_TOAST':
@@ -158,7 +158,7 @@ function toast({ ...props }: Toast) {
 }
 
 function useToast() {
-  const [state, setState] = React.useState<State>(memoryState)
+  const [ state, setState ] = React.useState<State>(memoryState)
 
   React.useEffect(() => {
     listeners.push(setState)
@@ -168,7 +168,7 @@ function useToast() {
         listeners.splice(index, 1)
       }
     }
-  }, [state])
+  }, [ state ])
 
   return {
     ...state,

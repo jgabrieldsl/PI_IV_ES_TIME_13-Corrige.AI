@@ -14,10 +14,10 @@ interface EssayInputProps {
 }
 
 export function EssayInput({ user, onSubmit }: EssayInputProps) {
-  const [value, setValue] = useState("")
-  const [theme, setTheme] = useState("")
-  const [customTheme, setCustomTheme] = useState("")
-  const [isThemeOpen, setIsThemeOpen] = useState(false)
+  const [ value, setValue ] = useState("")
+  const [ theme, setTheme ] = useState("")
+  const [ customTheme, setCustomTheme ] = useState("")
+  const [ isThemeOpen, setIsThemeOpen ] = useState(false)
   const { toast } = useToast()
 
   const selectedTheme = ESSAY_THEMES.find((t) => t.value === theme)

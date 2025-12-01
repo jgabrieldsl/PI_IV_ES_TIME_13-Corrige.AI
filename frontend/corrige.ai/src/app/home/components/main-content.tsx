@@ -23,9 +23,9 @@ interface MainContentProps {
 type ViewState = "input" | "loading" | "correction"
 
 export function MainContent({ onOpenChat, hasCorrection, onCorrectionComplete, user, essays }: MainContentProps) {
-  const [viewState, setViewState] = useState<ViewState>("input")
-  const [essayText, setEssayText] = useState("")
-  const [correctionData, setCorrectionData] = useState<CorrectionResult | null>(null)
+  const [ viewState, setViewState ] = useState<ViewState>("input")
+  const [ essayText, setEssayText ] = useState("")
+  const [ correctionData, setCorrectionData ] = useState<CorrectionResult | null>(null)
   const { toast } = useToast()
 
   const handleBack = () => {

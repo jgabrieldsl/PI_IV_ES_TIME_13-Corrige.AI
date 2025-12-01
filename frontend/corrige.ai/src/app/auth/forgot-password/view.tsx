@@ -13,7 +13,7 @@ export default function ForgotPasswordPage() {
     const { form, resetPassword, loading, error, clearError } = useResetPassword()
     const { register, formState: { errors } } = form
     const { toast } = useToast()
-    const [success, setSuccess] = useState(false)
+    const [ success, setSuccess ] = useState(false)
 
     useEffect(() => {
         if (error) {
@@ -25,7 +25,7 @@ export default function ForgotPasswordPage() {
             })
             clearError()
         }
-    }, [error, toast, clearError])
+    }, [ error, toast, clearError ])
 
     const onSubmit = async (data: { email: string }) => {
         await resetPassword(data)
