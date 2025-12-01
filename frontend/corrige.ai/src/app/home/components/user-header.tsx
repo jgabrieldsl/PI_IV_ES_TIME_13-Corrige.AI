@@ -10,9 +10,10 @@ import type { User } from "firebase/auth"
 
 interface UserHeaderProps {
   user: User | null
+  onOpenChat: () => void
 }
 
-export function UserHeader({ user }: UserHeaderProps) {
+export function UserHeader({ user, onOpenChat }: UserHeaderProps) {
   const navigate = useNavigate()
   const { toast } = useToast()
 
@@ -50,6 +51,9 @@ export function UserHeader({ user }: UserHeaderProps) {
       </div>
 
       <div className="flex items-center gap-2">
+        <Button variant="default" size="sm" onClick={onOpenChat}>
+          Você é professor?
+        </Button>
         <ThemeToggle />
         <Button
           variant="ghost"

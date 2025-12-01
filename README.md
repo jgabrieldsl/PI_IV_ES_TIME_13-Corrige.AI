@@ -32,7 +32,7 @@ O servidor Java gerencia conexões TCP em tempo real.
 cd servidor
 
 # Compile e execute o servidor
-mvn exec:java
+mvn clean compile exec:java
 ```
 
 **Comandos disponíveis no servidor:**

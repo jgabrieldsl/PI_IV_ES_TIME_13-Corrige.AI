@@ -1,6 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getAuthErrorMessage(error: any): string {
-    // Extract the error code or message from various possible locations
     let errorCode = '';
 
     if (typeof error === 'string') {
@@ -10,20 +9,17 @@ export function getAuthErrorMessage(error: any): string {
     } else if (error?.message) {
         errorCode = error.message;
     } else if (error?.error?.message) {
-        // Handle raw API error structure: { error: { message: "EMAIL_EXISTS" } }
         errorCode = error.error.message;
     } else if (error?.error?.code) {
         errorCode = error.error.code;
     }
 
-    // Handle raw API errors
     if (errorCode?.includes('EMAIL_EXISTS')) return 'Este e-mail já está em uso.';
     if (errorCode?.includes('INVALID_PASSWORD')) return 'Senha incorreta.';
     if (errorCode?.includes('EMAIL_NOT_FOUND')) return 'E-mail não encontrado.';
     if (errorCode?.includes('USER_DISABLED')) return 'Usuário desativado.';
     if (errorCode?.includes('TOO_MANY_ATTEMPTS_TRY_LATER')) return 'Muitas tentativas. Tente novamente mais tarde.';
 
-    // Handle Firebase SDK errors
     switch (errorCode) {
         case 'auth/invalid-credential':
         case 'auth/wrong-password':

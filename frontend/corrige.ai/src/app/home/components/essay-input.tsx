@@ -41,7 +41,6 @@ export function EssayInput({ user, onSubmit }: EssayInputProps) {
       userId: user.uid,
     })
 
-    // Reset form
     setValue("")
     setTheme("")
     setCustomTheme("")

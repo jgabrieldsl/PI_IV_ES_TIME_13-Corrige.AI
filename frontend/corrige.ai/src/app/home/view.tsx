@@ -44,9 +44,6 @@ export default function Home() {
   }
 
   const handleNewEssayComplete = () => {
-    // Refresh essays list or add the new one if we had the full object.
-    // Since MainContent now gets the full essay object on success, we can update it there or just reload.
-    // For now, let's reload to be safe and simple, or better, we can just fetch again.
     loadEssays()
     setHasCorrection(true)
   }
@@ -98,7 +95,7 @@ export default function Home() {
           />
         )}
 
-        {hasCorrection && <ProfessorChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />}
+        <ProfessorChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       </div>
     </div>
   )

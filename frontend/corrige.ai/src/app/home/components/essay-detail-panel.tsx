@@ -37,10 +37,10 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden">
-      <UserHeader user={user} />
+      <UserHeader user={user} onOpenChat={onOpenChat} />
 
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-6 py-8">
+        <div className="max-w-5xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <Button variant="ghost" onClick={onBack} className="rounded-xl hover:bg-secondary cursor-pointer">
               <ArrowLeft className="w-4 h-4 mr-2" />
