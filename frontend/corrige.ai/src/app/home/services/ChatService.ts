@@ -9,26 +9,22 @@ export class ChatService {
   }
 
   async sendMessage(request: SendMessageRequest): Promise<void> {
-    try {
-      await this.apiService.post('/api/chat/send', request)
-    } catch (error) {
-      throw error
-    }
+    await this.apiService.post('/api/chat/send', request)
   }
 
-  // Conecta ao stream SSE de mensagens
   connectToMessageStream(socketId: string, onMessage: (message: ChatMessage) => void): EventSource {
-    const eventSource = new EventSource(`http://localhost:8080/api/chat/stream/${socketId}`)
-    
+    const baseUrl = import.meta.env.VITE_API_BASE_URL
+    const eventSource = new EventSource(`${baseUrl}/api/chat/stream/${socketId}`)
+
     eventSource.addEventListener('chat-message', (event) => {
       const message: ChatMessage = JSON.parse(event.data)
       onMessage(message)
     })
-    
+
     eventSource.onerror = (error) => {
       console.error('Erro no stream SSE:', error)
     }
-    
+
     return eventSource
   }
 }

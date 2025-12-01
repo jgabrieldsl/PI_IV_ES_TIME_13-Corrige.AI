@@ -1,171 +1,86 @@
-import { useState } from 'react'
-import { useConnectionHome, useChatHome } from './hooks'
+import { useState, useEffect } from "react"
+import { Sidebar } from "@/app/home/components/sidebar"
+import { ProfessorChat } from "@/app/home/components/professor-chat"
+import { type AppView, type Essay } from "@/shared/lib/types"
+import { useAuth } from "@/app/auth/contexts/auth-context"
+import { useEssayController } from "@/app/home/controllers"
+import { useTheme } from "@/shared/components/theme-provider"
+import { Aurora } from "@/shared/components/ui/aurora-background"
 
+import { EssayDetailPanel, EssaysHistoryPage, MainContent } from "./components/pages"
 
+export default function Home() {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+  const [currentView, setCurrentView] = useState<AppView>("home")
+  const { resolvedTheme } = useTheme()
+  const { user } = useAuth()
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card"
-import { Button } from "@/shared/components/ui/button"
-import { Alert, AlertDescription } from "@/shared/components/ui/alert"
-import { ExpandableChat, ExpandableChatBody, ExpandableChatFooter, ExpandableChatHeader } from '@/shared/components/ui/expandable-chat'
-import { Input } from '@/shared/components/ui/input'
-import { Paperclip, Send, LogOut } from 'lucide-react'
-import { useAuth } from '@/app/auth/contexts/auth-context'
-import { useNavigate } from 'react-router-dom'
+  // Usa o controlador Zustand para gerenciar estado das redações
+  const { essays, currentEssay, loadUserEssays, selectEssay } = useEssayController()
 
-export const Home = () => {
-  const { connection, isConnecting, currentUserId, handleConnect, handleDisconnect } = useConnectionHome()
-  const [messageInput, setMessageInput] = useState('')
-  const { signOut } = useAuth()
-  const navigate = useNavigate()
-
-  const isConnected = connection?.dados?.socketId
-  const { messages, sendMessage } = useChatHome(isConnected || null, currentUserId)
-
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (messageInput.trim()) {
-      await sendMessage(messageInput)
-      setMessageInput('')
+  // Carrega as redações do usuário ao montar o componente
+  useEffect(() => {
+    if (user?.uid) {
+      loadUserEssays(user.uid)
     }
+  }, [user, loadUserEssays])
+
+  // Seleciona uma redação e navega para a tela de detalhes
+  const handleSelectEssay = (essay: Essay) => {
+    selectEssay(essay)
+    setCurrentView("essay-detail")
   }
 
-  const handleLogout = async () => {
-    try {
-      await signOut()
-      navigate('/auth/login')
-    } catch (error) {
-      console.error('Failed to log out', error)
-    }
-  }
+  const hasCorrection = essays.length > 0
 
   return (
-    <main className="h-screen w-screen flex items-center justify-center relative">
-      <div className="absolute top-4 right-4">
-        <Button variant="outline" onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          Sair
-        </Button>
+    <div className="relative flex h-screen bg-background overflow-hidden">
+      {resolvedTheme === "dark" && (
+        <Aurora
+          colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
+          blend={0.5}
+          amplitude={1.0}
+          speed={0.5}
+        />
+      )}
+
+      <div className="relative z-10 flex w-full h-full">
+        <Sidebar
+          currentView={currentView}
+          onNavigate={setCurrentView}
+          essays={essays}
+          onSelectEssay={handleSelectEssay}
+          user={user}
+        />
+
+        {currentView === "home" && (
+          <MainContent
+            onOpenChat={() => setIsChatOpen(true)}
+            hasCorrection={hasCorrection}
+            user={user}
+            essays={essays}
+          />
+        )}
+
+        {currentView === "history" && (
+          <EssaysHistoryPage
+            onSelectEssay={handleSelectEssay}
+            onOpenChat={() => setIsChatOpen(true)}
+            user={user}
+          />
+        )}
+
+        {currentView === "essay-detail" && currentEssay && (
+          <EssayDetailPanel
+            essay={currentEssay}
+            onBack={() => setCurrentView("history")}
+            onOpenChat={() => setIsChatOpen(true)}
+            user={user}
+          />
+        )}
+
+        <ProfessorChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       </div>
-      <Card className="w-full max-w-2xs mx-8">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">
-            Sistema de Conexão
-          </CardTitle>
-        </CardHeader>
-
-        <CardContent className="space-y-4">
-          {isConnecting && (
-            <Alert>
-              <AlertDescription className="text-black text-center">
-                Estabelecendo conexão...
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {isConnected && (
-            <Card className="bg-green-50 border-green-200">
-              <CardHeader>
-                <CardTitle className="text-green-700 text-lg text-center">
-                  Conexão estabelecida!
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="text-sm text-green-600 text-center">
-                  Socket ID: {connection.dados.socketId}
-                </p>
-                <p className="text-sm text-green-600 text-center">
-                  Timestamp: {new Date(connection.dados.timestamp).toLocaleString()}
-                </p>
-                <p className="text-sm text-green-600 text-center font-semibold">
-                  Usuários conectados: {connection.dados.totalUsuarios}
-                </p>
-              </CardContent>
-            </Card>
-          )}
-
-          <Button
-            onClick={handleConnect}
-            disabled={isConnecting || !!isConnected}
-            variant={"default"}
-            className="w-full"
-          >
-            {isConnecting ? 'Conectando...' : isConnected ? 'Conectado' : 'Conectar'}
-          </Button>
-
-          {isConnected && (
-            <Button
-              onClick={handleDisconnect}
-              variant={"destructive"}
-              className="w-full"
-            >
-              Desconectar
-            </Button>
-          )}
-        </CardContent>
-      </Card>
-      <ExpandableChat>
-        <ExpandableChatHeader>
-          <div className="flex items-center gap-4">
-            <div className="flex flex-col">
-              <h4 className="text-lg font-medium">Corrige AI Chat</h4>
-              <p className="text-sm text-muted-foreground">
-                {isConnected ? `${messages.length} mensagens` : 'Conecte-se para usar o chat'}
-              </p>
-            </div>
-          </div>
-        </ExpandableChatHeader>
-        <ExpandableChatBody>
-          <div className="p-4 space-y-4">
-            {!isConnected && (
-              <div className="text-center text-muted-foreground py-8">
-                <p>Conecte-se para começar a usar o chat</p>
-              </div>
-            )}
-            {messages.map((msg: any, index: any) => (
-              <div
-                key={index}
-                className={`flex items-end gap-2 ${msg.userId === currentUserId ? 'justify-end' : ''
-                  }`}
-              >
-                <div className={`${msg.userId === currentUserId
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted'
-                  } p-3 rounded-lg max-w-[80%]`}
-                >
-                  <p className="text-xs font-semibold mb-1">
-                    {msg.userId === currentUserId ? 'Você' : msg.userId}
-                  </p>
-                  <p>{msg.mensagem}</p>
-                  <p className="text-xs opacity-70 mt-1">
-                    {new Date(msg.timestamp).toLocaleTimeString()}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </ExpandableChatBody>
-        <ExpandableChatFooter>
-          <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-            <Button size="icon" variant="ghost" type="button">
-              <Paperclip className="h-5 w-5" />
-            </Button>
-            <Input
-              autoComplete="off"
-              name="message"
-              placeholder="Digite sua mensagem..."
-              className="flex-1"
-              value={messageInput}
-              onChange={(e) => setMessageInput(e.target.value)}
-              disabled={!isConnected}
-            />
-            <Button type="submit" disabled={!isConnected || !messageInput.trim()}>
-              <Send className="h-5 w-5" />
-            </Button>
-          </form>
-        </ExpandableChatFooter>
-      </ExpandableChat>
-    </main>
+    </div>
   )
 }
-
-export default Home

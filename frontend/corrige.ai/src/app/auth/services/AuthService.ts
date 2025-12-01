@@ -1,6 +1,6 @@
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut } from "firebase/auth"
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut, sendPasswordResetEmail } from "firebase/auth"
 import { auth } from "@/shared/lib/firebase"
-import type { LoginCredentials, SignupCredentials, AuthUser } from "../models"
+import type { LoginCredentials, RegisterCredentials, AuthUser } from "../models"
 
 export class AuthService {
     async login(credentials: LoginCredentials): Promise<AuthUser> {
@@ -17,7 +17,7 @@ export class AuthService {
         }
     }
 
-    async signup(credentials: SignupCredentials): Promise<AuthUser> {
+    async register(credentials: RegisterCredentials): Promise<AuthUser> {
         const userCredential = await createUserWithEmailAndPassword(
             auth,
             credentials.email,
@@ -33,5 +33,9 @@ export class AuthService {
 
     async logout(): Promise<void> {
         await firebaseSignOut(auth)
+    }
+
+    async resetPassword(email: string): Promise<void> {
+        await sendPasswordResetEmail(auth, email)
     }
 }

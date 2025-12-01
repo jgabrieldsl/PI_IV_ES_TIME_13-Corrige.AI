@@ -1,23 +1,21 @@
 import * as z from "zod"
 
-// Zod Schemas
 export const loginSchema = z.object({
-    email: z.string().email({ message: "Por favor, insira um email válido." }),
-    password: z.string().min(6, { message: "A senha deve ter pelo menos 6 caracteres." }),
+    email: z.string().email("E-mail inválido"),
+    password: z.string().min(1, "A senha é obrigatória"),
 })
 
-export const signupSchema = z.object({
-    email: z.string().email({ message: "Por favor, insira um email válido." }),
-    password: z.string().min(6, { message: "A senha deve ter pelo menos 6 caracteres." }),
-    confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "As senhas não coincidem",
-    path: ["confirmPassword"],
+export const registerSchema = z.object({
+    email: z.string().email("E-mail inválido"),
+    password: z.string()
+        .min(8, "Mínimo 8 caracteres")
+        .regex(/[A-Z]/, "Uma letra maiúscula")
+        .regex(/\d/, "Um número"),
+    terms: z.boolean().refine(val => val === true, "Você deve aceitar os termos"),
 })
 
-// TypeScript Types
 export type LoginCredentials = z.infer<typeof loginSchema>
-export type SignupCredentials = z.infer<typeof signupSchema>
+export type RegisterCredentials = z.infer<typeof registerSchema>
 
 export interface AuthUser {
     uid: string

@@ -33,8 +33,7 @@ export const useConnectionController = create<IConnection>()((set, get) => {
           currentUserId: params.dados.userId // Salva o userId atual
         })
 
-      } catch (error) {
-        console.error('Um erro ocorreu')
+      } catch {
         set({ isConnecting: false })
       }
     },

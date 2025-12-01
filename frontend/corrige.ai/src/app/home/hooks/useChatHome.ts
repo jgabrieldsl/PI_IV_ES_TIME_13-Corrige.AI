@@ -12,7 +12,7 @@ export const useChatHome = (socketId: string | null, currentUserId: string) => {
     if (currentUserId) {
       setCurrentUserId(currentUserId)
     }
-  }, [currentUserId])
+  }, [ currentUserId, setCurrentUserId ])
 
   useEffect(() => {
     if (socketId && !hasConnected.current) {
@@ -26,7 +26,7 @@ export const useChatHome = (socketId: string | null, currentUserId: string) => {
         hasConnected.current = false
       }
     }
-  }, [socketId])
+  }, [ socketId, connectToChat, disconnectFromChat ])
 
   const handleSendMessage = async (mensagem: string) => {
     if (socketId && mensagem.trim()) {

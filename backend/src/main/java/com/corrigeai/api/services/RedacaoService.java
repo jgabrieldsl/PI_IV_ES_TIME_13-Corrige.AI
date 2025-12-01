@@ -22,26 +22,31 @@ public class RedacaoService {
 @Autowired
     private ObjectMapper objectMapper;
 
-    public Redacao processarEavaliarRedacao(String conteudo, String userId) throws Exception {
+    public Redacao processarEavaliarRedacao(String conteudo, String userId, String titulo, String tema) throws Exception {
         if(conteudo == null || conteudo.trim().isEmpty()) {
             throw new IllegalArgumentException("Conteúdo da redação não pode ser vazio");
         }
-Redacao novaRedacao = new Redacao();
-novaRedacao.setConteudo(conteudo);
-novaRedacao.setStatus("PENDENTE");
-novaRedacao.setDataEnvio(new Date());
-novaRedacao.setUserId(userId);
+        Redacao novaRedacao = new Redacao();
+        novaRedacao.setConteudo(conteudo);
+        novaRedacao.setTitulo(titulo);
+        novaRedacao.setTema(tema);
+        novaRedacao.setStatus("PENDENTE");
+        novaRedacao.setDataEnvio(new Date());
+        novaRedacao.setUserId(userId);
 
-Redacao redacaoInicial = redacaoRepository.save(novaRedacao);
+        Redacao redacaoInicial = redacaoRepository.save(novaRedacao);
 
-String jsonAvaliacao = geminiService.avaliarRedacao(conteudo);
- 
- AvaliacaoResultadoDTO resultado = objectMapper.readValue(jsonAvaliacao, AvaliacaoResultadoDTO.class);
+        String jsonAvaliacao = geminiService.avaliarRedacao(conteudo);
+        
+        AvaliacaoResultadoDTO resultado = objectMapper.readValue(jsonAvaliacao, AvaliacaoResultadoDTO.class);
 
- redacaoInicial.setPontuacaoTotal(resultado.getPontuacaoTotal());
- redacaoInicial.setFeedbackGeral(resultado.getFeedbackGeral());
- redacaoInicial.setDetalhesCompetencias(resultado.getDetalhamentoCompetencias()); 
- redacaoInicial.setStatus("CORRIGIDA"); 
+        redacaoInicial.setPontuacaoTotal(resultado.getPontuacaoTotal());
+        redacaoInicial.setFeedbackGeral(resultado.getFeedbackGeral());
+        redacaoInicial.setDetalhesCompetencias(resultado.getDetalhamentoCompetencias()); 
+        redacaoInicial.setPontosFortes(resultado.getPontosFortes());
+        redacaoInicial.setPontosMelhoria(resultado.getPontosMelhoria());
+        
+        redacaoInicial.setStatus("CORRIGIDA"); 
         return redacaoRepository.save(redacaoInicial);
     }
 

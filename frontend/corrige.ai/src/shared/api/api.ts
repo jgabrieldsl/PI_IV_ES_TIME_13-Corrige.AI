@@ -18,22 +18,22 @@ api.interceptors.response.use(
 )
 
 export class ApiService {
-  async get<T> (url: string, params?: any): Promise<T> {
+  async get<T>(url: string, params?: unknown): Promise<T> {
     const response = await api.get<T>(url, { params })
     return response.data
   }
 
-  async post<T> (url: string, data: any): Promise<T> {
+  async post<T>(url: string, data: unknown): Promise<T> {
     const response = await api.post<T>(url, data)
     return response.data
   }
 
-  async put<T> (url: string, data: any): Promise<T> {
+  async put<T>(url: string, data: unknown): Promise<T> {
     const response = await api.put<T>(url, data)
     return response.data
   }
 
-  async delete<T> (url: string, params?: any): Promise<T> {
+  async delete<T>(url: string, params?: unknown): Promise<T> {
     const response = await api.delete<T>(url, { params })
     return response.data
   }
