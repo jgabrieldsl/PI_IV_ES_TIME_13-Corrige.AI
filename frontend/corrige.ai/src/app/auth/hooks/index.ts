@@ -1,3 +1,4 @@
 export * from './useLogin'
-export * from './useSignup'
+export * from './useRegister'
+export * from './useResetPassword'
 

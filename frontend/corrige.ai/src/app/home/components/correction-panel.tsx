@@ -1,17 +1,18 @@
 import { ArrowLeft, MessageCircle, TrendingUp, Award, Lightbulb, CheckCircle2, AlertCircle } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
 import { Progress } from "@/shared/components/ui/progress"
-import { EvolutionChart } from "./evolution-chart"
-import type { CorrectionResult } from "@/shared/lib/types"
+import { EvolutionChart } from "@/app/home/components/evolution-chart"
+import type { CorrectionResult, Essay } from "@/shared/lib/types"
 
 interface CorrectionPanelProps {
   essayText: string
   correctionData: CorrectionResult
+  essays: Essay[]
   onBack: () => void
   onOpenChat: () => void
 }
 
-export function CorrectionPanel({ essayText, correctionData, onBack, onOpenChat }: CorrectionPanelProps) {
+export function CorrectionPanel({ essayText, correctionData, essays, onBack, onOpenChat }: CorrectionPanelProps) {
   const { totalScore, competencies, generalFeedback, strengths, improvements } = correctionData
 
   return (
@@ -22,9 +23,9 @@ export function CorrectionPanel({ essayText, correctionData, onBack, onOpenChat 
           <ArrowLeft className="w-4 h-4 mr-2" />
           Nova Redacao
         </Button>
-        <Button onClick={onOpenChat} className="rounded-lg gradient-ai hover:opacity-90 text-white border-0">
+        <Button onClick={onOpenChat} className="rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground">
           <MessageCircle className="w-4 h-4 mr-2" />
-          Falar com Professor
+          Falar com o professor
         </Button>
       </div>
 
@@ -36,7 +37,7 @@ export function CorrectionPanel({ essayText, correctionData, onBack, onOpenChat 
               <Award className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-foreground">Nota Final</h2>
+              <h2 className="text-lg font-semibold text-foreground">Nota final</h2>
               <p className="text-sm text-muted-foreground">Baseada nas 5 competencias do ENEM</p>
             </div>
           </div>
@@ -122,7 +123,7 @@ export function CorrectionPanel({ essayText, correctionData, onBack, onOpenChat 
       {/* Grid Layout */}
       <div className="grid lg:grid-cols-2 gap-4">
         {/* Evolution Chart */}
-        <EvolutionChart />
+        <EvolutionChart essays={essays} />
 
         {/* Essay Preview */}
         <div className="glass rounded-xl p-5">

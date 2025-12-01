@@ -33,6 +33,8 @@ public class GeminiAIService {
              - "feedback_geral": Um parágrafo de feedback construtivo sobre o texto em Português.
              - "detalhamento_competencias": Uma lista de 5 objetos JSON, um para cada competência do ENEM (C1 a C5), 
                contendo as chaves 'competencia', 'pontuacao' (0 a 200) e 'comentario' (em Português).
+             - "pontos_fortes": Uma lista de strings com 3 pontos fortes da redação.
+             - "pontos_melhoria": Uma lista de strings com 3 pontos de melhoria para a redação.
              
              Não inclua nenhum texto, saudações, ou explicação fora da estrutura JSON.
              """;

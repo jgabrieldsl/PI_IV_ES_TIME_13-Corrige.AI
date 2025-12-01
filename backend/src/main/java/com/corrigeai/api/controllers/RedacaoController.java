@@ -23,7 +23,9 @@ public class RedacaoController{
                 // ⬅️ Chama o novo método que inclui a IA
                 Redacao redacaoProcessada = redacaoService.processarEavaliarRedacao(
                     redacaoRequest.getConteudo(), 
-                    redacaoRequest.getUserId()
+                    redacaoRequest.getUserId(),
+                    redacaoRequest.getTitulo(),
+                    redacaoRequest.getTema()
                 );
                 // Retorna 200 OK com a redação já corrigida pela IA
                 return ResponseEntity.ok(redacaoProcessada);

@@ -31,7 +31,7 @@
   --chart-3: oklch(0.45 0.07 280);
   --chart-4: oklch(0.6 0.06 220);
   --chart-5: oklch(0.4 0.08 260);
-  --radius: 0.375rem;
+  --radius: 0.575rem;
   --sidebar: oklch(0.97 0.003 260);
   --sidebar-foreground: oklch(0.15 0.005 260);
   --sidebar-primary: oklch(0.25 0.01 260);
@@ -129,9 +129,14 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.button {
+  cursor: pointer !important;
 }
 
 /* Custom scrollbar - light mode */

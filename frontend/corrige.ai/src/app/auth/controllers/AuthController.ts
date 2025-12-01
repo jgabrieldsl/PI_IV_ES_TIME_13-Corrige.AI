@@ -1,14 +1,15 @@
 import { create } from 'zustand'
 import { AuthService } from '../services'
-import type { LoginCredentials, SignupCredentials, AuthUser } from '../models'
+import type { LoginCredentials, RegisterCredentials, AuthUser } from '../models'
 
 interface IAuthController {
     user: AuthUser | null
     loading: boolean
     error: any | null
     login: (credentials: LoginCredentials) => Promise<void>
-    signup: (credentials: SignupCredentials) => Promise<void>
+    register: (credentials: RegisterCredentials) => Promise<void>
     logout: () => Promise<void>
+    resetPassword: (email: string) => Promise<void>
     clearError: () => void
 }
 
@@ -26,7 +27,6 @@ export const useAuthController = create<IAuthController>()((set) => {
                 const user = await authService.login(credentials)
                 set({ user, loading: false })
             } catch (error) {
-                console.error("AuthController login error:", error)
                 set({
                     error: error,
                     loading: false
@@ -35,13 +35,12 @@ export const useAuthController = create<IAuthController>()((set) => {
             }
         },
 
-        signup: async (credentials: SignupCredentials) => {
+        register: async (credentials: RegisterCredentials) => {
             set({ loading: true, error: null })
             try {
-                const user = await authService.signup(credentials)
+                const user = await authService.register(credentials)
                 set({ user, loading: false })
             } catch (error) {
-                console.error("AuthController signup error:", error)
                 set({
                     error: error,
                     loading: false
@@ -60,6 +59,20 @@ export const useAuthController = create<IAuthController>()((set) => {
                     error: error,
                     loading: false
                 })
+            }
+        },
+
+        resetPassword: async (email: string) => {
+            set({ loading: true, error: null })
+            try {
+                await authService.resetPassword(email)
+                set({ loading: false })
+            } catch (error) {
+                set({
+                    error: error,
+                    loading: false
+                })
+                throw error
             }
         },
 

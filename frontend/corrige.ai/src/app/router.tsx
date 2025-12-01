@@ -2,7 +2,8 @@ import { Route, Routes } from 'react-router-dom'
 
 import NotFoundView from './not-found'
 import LoginPage from './auth/login/view'
-import SignupPage from './auth/signup/view'
+import RegisterPage from './auth/register/view'
+import ForgotPasswordPage from './auth/forgot-password/view'
 
 import Home from './home'
 
@@ -12,7 +13,8 @@ import { ProtectedRoute } from '@/shared/components/auth/protected-route'
 const ROUTES = {
   not_found: '/*',
   login: '/auth/login',
-  signup: '/auth/signup',
+  register: '/auth/register',
+  forgot_password: '/auth/forgot-password',
 }
 
 export function Router() {
@@ -31,8 +33,12 @@ export function Router() {
         element={<LoginPage />}
       />
       <Route
-        path={ROUTES.signup}
-        element={<SignupPage />}
+        path={ROUTES.register}
+        element={<RegisterPage />}
+      />
+      <Route
+        path={ROUTES.forgot_password}
+        element={<ForgotPasswordPage />}
       />
       <Route
         path={ROUTES.not_found}

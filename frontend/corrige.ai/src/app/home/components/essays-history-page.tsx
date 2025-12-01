@@ -1,21 +1,49 @@
-import { useState } from "react"
-import { FileText, Calendar, TrendingUp, Search, Filter, ArrowUpRight, MessageCircle } from "lucide-react"
+import { useState, useEffect } from "react"
+import { FileText, Calendar, TrendingUp, Search, ArrowUpRight, MessageCircle, Loader2 } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
-import { UserHeader } from "./user-header"
-import { EvolutionChartFull } from "./evolution-chart-full"
+import { UserHeader } from "@/app/home/components/user-header"
+import { EvolutionChartFull } from "@/app/home/components/evolution-chart-full"
 import type { Essay } from "@/shared/lib/types"
 import type { User } from "firebase/auth"
+import { EssayService } from "@/app/home/services/EssayService"
+import { useToast } from "@/shared/hooks/use-toast"
 
 interface EssaysHistoryPageProps {
-  essays: Essay[]
   onSelectEssay: (essay: Essay) => void
   onOpenChat: () => void
   user: User | null
 }
 
-export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat, user }: EssaysHistoryPageProps) {
+export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHistoryPageProps) {
   const [searchQuery, setSearchQuery] = useState("")
+  const [essays, setEssays] = useState<Essay[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const { toast } = useToast()
+
+  useEffect(() => {
+    if (user) {
+      loadEssays()
+    }
+  }, [user])
+
+  const loadEssays = async () => {
+    try {
+      setIsLoading(true)
+      if (user?.uid) {
+        const data = await EssayService.getUserEssays(user.uid)
+        setEssays(data)
+      }
+    } catch (error) {
+      toast({
+        title: "Erro ao carregar redações",
+        description: "Não foi possível carregar seu histórico. Tente novamente.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const filteredEssays = essays.filter((essay) => essay.title.toLowerCase().includes(searchQuery.toLowerCase()))
 
@@ -30,7 +58,18 @@ export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat, user }: E
   const averageScore =
     essays.length > 0 ? Math.round(essays.reduce((acc, e) => acc + e.correction.totalScore, 0) / essays.length) : 0
 
-  const bestScore = essays.length > 0 ? Math.max(...essays.map((e) => e.correction.totalScore)) : 0
+  const bestScore = essays.length > 0 ? Math.max(...essays.map((essay) => essay.correction.totalScore)) : 0
+
+  if (isLoading) {
+    return (
+      <main className="flex-1 flex flex-col overflow-hidden">
+        <UserHeader user={user} />
+        <div className="flex-1 flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden">
@@ -41,12 +80,12 @@ export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat, user }: E
           {/* Page Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-2xl font-bold text-foreground mb-1">Historico de Redacoes</h1>
-              <p className="text-muted-foreground">Acompanhe sua evolucao e revise suas correcoes anteriores</p>
+              <h1 className="text-2xl font-bold text-foreground mb-1">Histórico de Redações</h1>
+              <p className="text-muted-foreground">Acompanhe sua evolução e revise suas correções anteriores</p>
             </div>
-            <Button onClick={onOpenChat} className="rounded-lg gradient-ai hover:opacity-90 text-white border-0">
+            <Button onClick={onOpenChat} className="rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground">
               <MessageCircle className="w-4 h-4 mr-2" />
-              Falar com Professor
+              Falar com o professor
             </Button>
           </div>
 
@@ -57,7 +96,7 @@ export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat, user }: E
                 <div className="w-10 h-10 rounded-lg gradient-ai flex items-center justify-center">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-sm text-muted-foreground">Total de Redacoes</span>
+                <span className="text-sm text-muted-foreground">Total de Redações</span>
               </div>
               <p className="text-3xl font-bold text-foreground">{essays.length}</p>
             </div>
@@ -67,7 +106,7 @@ export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat, user }: E
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-foreground" />
                 </div>
-                <span className="text-sm text-muted-foreground">Nota Media</span>
+                <span className="text-sm text-muted-foreground">Nota Média</span>
               </div>
               <p className="text-3xl font-bold text-foreground">{averageScore}</p>
             </div>
@@ -89,20 +128,17 @@ export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat, user }: E
           {/* Essays List */}
           <div className="glass rounded-xl p-5 mt-6">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-semibold text-foreground">Todas as Redacoes</h2>
+              <h2 className="text-lg font-semibold text-foreground">Todas as Redações</h2>
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
-                    placeholder="Buscar redacao..."
+                    placeholder="Buscar redação..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10 w-64 rounded-lg bg-muted/50 border-0"
                   />
                 </div>
-                <Button variant="outline" size="icon" className="rounded-lg bg-transparent">
-                  <Filter className="w-4 h-4" />
-                </Button>
               </div>
             </div>
 
@@ -111,7 +147,7 @@ export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat, user }: E
                 <button
                   key={essay.id}
                   onClick={() => onSelectEssay(essay)}
-                  className="w-full glass-subtle rounded-xl p-4 flex items-center gap-4 hover:bg-muted/50 transition-colors group text-left"
+                  className="w-full glass-subtle rounded-xl p-4 flex items-center gap-4 hover:bg-muted/50 transition-colors group text-left cursor-pointer"
                 >
                   <div className="w-11 h-11 rounded-lg bg-secondary flex items-center justify-center shrink-0">
                     <FileText className="w-5 h-5 text-foreground" />
@@ -124,7 +160,6 @@ export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat, user }: E
                         <Calendar className="w-3 h-3" />
                         {formatDate(essay.date)}
                       </span>
-                      <span>{essay.text.split(/\s+/).length} palavras</span>
                     </div>
                   </div>
 
@@ -156,7 +191,9 @@ export function EssaysHistoryPage({ essays, onSelectEssay, onOpenChat, user }: E
               {filteredEssays.length === 0 && (
                 <div className="text-center py-12">
                   <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">Nenhuma redacao encontrada</p>
+                  <p className="text-muted-foreground">
+                    {essays.length === 0 ? "Nenhuma redação enviada" : "Nenhuma redação encontrada"}
+                  </p>
                 </div>
               )}
             </div>

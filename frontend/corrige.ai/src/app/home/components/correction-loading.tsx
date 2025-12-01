@@ -28,16 +28,9 @@ export function CorrectionLoading() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8">
-      <div className="relative">
-        <div className="w-20 h-20 rounded-xl gradient-ai flex items-center justify-center animate-pulse">
-          <Sparkles className="w-10 h-10 text-white" />
-        </div>
-        <div className="absolute inset-0 w-20 h-20 rounded-xl border-2 border-border animate-ping" />
-      </div>
-
       {/* Title */}
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-foreground">Corrigindo sua redacao</h2>
+        <h2 className="text-2xl font-bold text-foreground">Corrigindo sua redação</h2>
         <p className="text-muted-foreground">Aguarde enquanto nossa IA analisa seu texto</p>
       </div>
 
