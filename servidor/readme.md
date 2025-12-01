@@ -7,14 +7,13 @@ Servidor Java implementado com Sockets TCP para gerenciar comunicação de chat 
 ```
 Frontend ←→ Backend ←→ Servidor Socket
     ↓         ↓           ↓
-   SSE    MongoDB    Broadcast TCP
+   SSE    API REST    Broadcast TCP
 ```
 
 ### Componentes:
 - **Frontend**: Interface React com chat em tempo real
 - **Backend**: API Spring Boot que gerencia conexões e SSE
 - **Servidor Socket**: Hub Java TCP para broadcast de mensagens
-- **Database**: MongoDB para persistir dados de conexões
 
 ## Funcionalidades Implementadas
 
@@ -28,7 +27,7 @@ Frontend ←→ Backend ←→ Servidor Socket
 - **Protocolo**: TCP/IP na porta 3001
 - **Persistência**: Conexões mantidas durante sessão
 - **SSE**: Server-Sent Events para push em tempo real
-- **MongoDB**: Armazenamento de dados de conexões
+
 
 ## Componentes Principais
 
@@ -50,7 +49,7 @@ Frontend ←→ Backend ←→ Servidor Socket
 - Frontend solicita conexão via Backend
 - Backend conecta TCP com Servidor
 - Servidor retorna socketId único
-- Backend salva conexão no MongoDB
+- Backend salva conexão no pool de memória (`ConcurrentHashMap`)
 
 ### 2. Chat:
 - Usuário envia mensagem via Frontend
