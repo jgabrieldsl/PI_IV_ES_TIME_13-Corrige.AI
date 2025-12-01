@@ -4,9 +4,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Added light theme as default, dark theme as variant */
+/* Adicionado tema claro como padrão, tema escuro como variante */
 :root {
-  /* Light theme - clean and neutral */
+  /* Tema claro - limpo e neutro */
   --background: oklch(0.98 0.002 260);
   --foreground: oklch(0.15 0.005 260);
   --card: oklch(1 0 0);
@@ -45,7 +45,7 @@
 }
 
 .dark {
-  /* Dark theme - neutral and elegant */
+  /* Tema escuro - neutro e elegante */
   --background: oklch(0.13 0.005 260);
   --foreground: oklch(0.95 0 0);
   --card: oklch(0.18 0.005 260);
@@ -139,7 +139,7 @@
   cursor: pointer !important;
 }
 
-/* Custom scrollbar - light mode */
+/* Barra de rolagem personalizada - modo claro */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -158,7 +158,7 @@
   background: oklch(0.65 0.005 260);
 }
 
-/* Dark mode scrollbar */
+/* Barra de rolagem modo escuro */
 .dark ::-webkit-scrollbar-thumb {
   background: oklch(0.32 0.005 260);
 }
@@ -167,7 +167,7 @@
   background: oklch(0.4 0.005 260);
 }
 
-/* Glass effect utility - adapts to theme */
+/* Utilitário de efeito de vidro - adapta-se ao tema */
 .glass {
   background: var(--glass);
   backdrop-filter: blur(12px);
@@ -180,7 +180,7 @@
   border: 1px solid var(--glass-border);
 }
 
-/* AI gradient adapts to theme */
+/* Gradiente de IA adapta-se ao tema */
 .gradient-ai {
   background: linear-gradient(135deg, oklch(0.45 0.04 250), oklch(0.4 0.035 270), oklch(0.42 0.04 240));
 }

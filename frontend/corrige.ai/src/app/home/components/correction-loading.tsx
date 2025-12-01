@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Brain, FileText, BarChart3, CheckCircle2, Sparkles } from "lucide-react"
+import { Brain, FileText, BarChart3, CheckCircle2 } from "lucide-react"
 
 const steps = [
   { icon: FileText, text: "Analisando estrutura do texto...", duration: 800 },
@@ -28,13 +28,11 @@ export function CorrectionLoading() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8">
-      {/* Title */}
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold text-foreground">Corrigindo sua redação</h2>
         <p className="text-muted-foreground">Aguarde enquanto nossa IA analisa seu texto</p>
       </div>
 
-      {/* Steps */}
       <div className="w-full max-w-md space-y-3">
         {steps.map((step, index) => {
           const Icon = step.icon

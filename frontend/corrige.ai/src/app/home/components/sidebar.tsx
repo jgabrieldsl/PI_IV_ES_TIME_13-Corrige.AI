@@ -27,8 +27,7 @@ export function Sidebar({ currentView, onNavigate, essays, onSelectEssay, user }
   }
 
   return (
-    <aside className="w-72 h-full bg-sidebar border-r border-sidebar-border flex flex-col">
-      {/* Logo */}
+    <aside className="w-72 h-full bg-sidebar/60 backdrop-blur-md flex flex-col">
       <div className="p-5 flex items-center justify-between">
         <button
           onClick={() => onNavigate("home")}
@@ -39,7 +38,6 @@ export function Sidebar({ currentView, onNavigate, essays, onSelectEssay, user }
         <ThemeToggle />
       </div>
 
-      {/* Navigation */}
       <div className="px-3 mb-4">
         <nav className="space-y-1">
           <button
@@ -68,7 +66,6 @@ export function Sidebar({ currentView, onNavigate, essays, onSelectEssay, user }
         </nav>
       </div>
 
-      {/* New Essay Button */}
       <div className="px-4 mb-6">
         <Button
           onClick={() => onNavigate("home")}
@@ -82,7 +79,6 @@ export function Sidebar({ currentView, onNavigate, essays, onSelectEssay, user }
         </Button>
       </div>
 
-      {/* Recent Essays */}
       <div className="flex-1 px-3 overflow-y-auto">
         <p className="px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Recentes</p>
         <nav className="space-y-1">
@@ -119,7 +115,6 @@ export function Sidebar({ currentView, onNavigate, essays, onSelectEssay, user }
         )}
       </div>
 
-      {/* User Section */}
       <div className="p-4 border-t border-sidebar-border">
         <div className="glass-subtle rounded-xl p-4">
           <div className="flex items-center gap-3">

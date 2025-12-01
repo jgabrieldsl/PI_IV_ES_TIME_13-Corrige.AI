@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getAuthErrorMessage(error: any): string {
     // Extract the error code or message from various possible locations
     let errorCode = '';

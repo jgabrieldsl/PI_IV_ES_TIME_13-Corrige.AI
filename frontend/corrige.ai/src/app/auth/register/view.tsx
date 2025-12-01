@@ -40,7 +40,7 @@ export default function RegisterPage() {
 
     return (
         <div className="min-h-screen flex">
-            {/* Left side - Branding */}
+            {/* Lado esquerdo - Branding */}
             <div className="hidden lg:flex lg:w-1/2 bg-foreground relative overflow-hidden">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[64px_64px]" />
                 <div className="relative z-10 flex flex-col justify-between p-12 w-full">
@@ -96,10 +96,10 @@ export default function RegisterPage() {
                 </div>
             </div>
 
-            {/* Right side - Form */}
+            {/* Lado direito - Formulário */}
             <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-background">
                 <div className="w-full max-w-md">
-                    {/* Mobile logo */}
+                    {/* Logo móvel */}
                     <div className="lg:hidden mb-8">
                         <Link to="/" className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-lg bg-foreground flex items-center justify-center">
