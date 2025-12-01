@@ -8,8 +8,8 @@ Utilizando APIs de IA para análise de texto, o sistema avalia competências com
 | Nome | Papel | Responsabilidades |
 |------|-------|-------------------|
 | **João Gabriel** | Frontend & Integração | Desenvolvimento da interface React, design Figma, integração frontend-backend |
-| **Gabriel Bonatto** | Servidor & Testes | Servidor Java TCP, design Figma, testes automatizados |
-| **Bruno Reitano** | Backend & Integração | API Spring Boot, servidor Java, integração com IA e MongoDB |
+| **Gabriel Bonatto** | Servidor & Testes | Servidor Java TCP, integração com IA, design Figma, testes automatizados |
+| **Bruno Reitano** | Backend & Integração | API Spring Boot(Endpoints), servidor Java, integração com MongoDB, design Figma |
 
 ## Como Rodar o Projeto
 
