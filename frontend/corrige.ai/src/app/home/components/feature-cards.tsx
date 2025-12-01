@@ -2,10 +2,9 @@ import { PenLine, BarChart3, MessageCircle, BookOpen, Plus, Lock } from "lucide-
 
 interface FeatureCardsProps {
   hasCorrection: boolean
-  onOpenChat: () => void
 }
 
-export function FeatureCards({ hasCorrection, onOpenChat }: FeatureCardsProps) {
+export function FeatureCards({ hasCorrection }: FeatureCardsProps) {
   const features = [
     {
       icon: PenLine,
@@ -28,7 +27,6 @@ export function FeatureCards({ hasCorrection, onOpenChat }: FeatureCardsProps) {
       color: hasCorrection ? "text-foreground" : "text-muted-foreground",
       bgColor: hasCorrection ? "bg-secondary" : "bg-muted/50",
       disabled: !hasCorrection,
-      action: onOpenChat,
     },
     {
       icon: BookOpen,
@@ -48,7 +46,6 @@ export function FeatureCards({ hasCorrection, onOpenChat }: FeatureCardsProps) {
         return (
           <button
             key={index}
-            onClick={feature.action && !isDisabled ? feature.action : undefined}
             disabled={isDisabled}
             className={`glass-subtle rounded-xl p-4 text-left transition-all duration-200 group relative overflow-hidden ${isDisabled ? "opacity-60 cursor-not-allowed" : "hover:bg-secondary/60"
               }`}

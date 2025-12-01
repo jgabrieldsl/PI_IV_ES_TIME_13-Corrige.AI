@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { FileText, Calendar, TrendingUp, Search, ArrowUpRight, MessageCircle, Loader2 } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
@@ -21,20 +21,14 @@ export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHis
   const [isLoading, setIsLoading] = useState(true)
   const { toast } = useToast()
 
-  useEffect(() => {
-    if (user) {
-      loadEssays()
-    }
-  }, [user])
-
-  const loadEssays = async () => {
+  const loadEssays = useCallback(async () => {
     try {
       setIsLoading(true)
       if (user?.uid) {
         const data = await EssayService.getUserEssays(user.uid)
         setEssays(data)
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro ao carregar redações",
         description: "Não foi possível carregar seu histórico. Tente novamente.",
@@ -43,7 +37,13 @@ export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHis
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [user, toast])
+
+  useEffect(() => {
+    if (user) {
+      loadEssays()
+    }
+  }, [user, loadEssays])
 
   const filteredEssays = essays.filter((essay) => essay.title.toLowerCase().includes(searchQuery.toLowerCase()))
 
@@ -77,7 +77,7 @@ export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHis
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-6xl mx-auto px-6 py-8">
-          {/* Page Header */}
+          {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-2xl font-bold text-foreground mb-1">Histórico de Redações</h1>
@@ -89,43 +89,40 @@ export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHis
             </Button>
           </div>
 
-          {/* Stats Cards - reduced rounding and neutral colors */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="glass rounded-xl p-5 gradient-ai-border">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-lg gradient-ai flex items-center justify-center">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-sm text-muted-foreground">Total de Redações</span>
+                <span className="text-sm text-muted-foreground">Total de redações</span>
               </div>
-              <p className="text-3xl font-bold text-foreground">{essays.length}</p>
+              <p className="text-3xl font-bold text-foreground ml-2">{essays.length}</p>
             </div>
 
             <div className="glass rounded-xl p-5">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-foreground" />
                 </div>
-                <span className="text-sm text-muted-foreground">Nota Média</span>
+                <span className="text-sm text-muted-foreground">Nota média</span>
               </div>
-              <p className="text-3xl font-bold text-foreground">{averageScore}</p>
+              <p className="text-3xl font-bold text-foreground ml-2">{averageScore}</p>
             </div>
 
             <div className="glass rounded-xl p-5">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-foreground" />
                 </div>
-                <span className="text-sm text-muted-foreground">Melhor Nota</span>
+                <span className="text-sm text-muted-foreground">Melhor nota</span>
               </div>
-              <p className="text-3xl font-bold text-foreground">{bestScore}</p>
+              <p className="text-3xl font-bold text-foreground ml-2">{bestScore}</p>
             </div>
           </div>
 
-          {/* Evolution Chart */}
           <EvolutionChartFull essays={essays} />
 
-          {/* Essays List */}
           <div className="glass rounded-xl p-5 mt-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold text-foreground">Todas as Redações</h2>

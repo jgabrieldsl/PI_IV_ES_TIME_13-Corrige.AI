@@ -58,26 +58,22 @@ export const useChatController = create<IChatController>()((set, get) => {
     },
 
     sendMessage: async (socketId: string, mensagem: string) => {
-      try {
-        const { currentUserId } = get()
+      const { currentUserId } = get()
 
-        // Adiciona a mensagem localmente primeiro
-        const localMessage: ChatMessage = {
-          userId: currentUserId,
-          userType: 'STUDENT',
-          mensagem: mensagem,
-          timestamp: Date.now()
-        }
-
-        set((state) => ({
-          messages: [...state.messages, localMessage]
-        }))
-
-        // Envia para o servidor
-        await chatService.sendMessage({ socketId, mensagem })
-      } catch (error) {
-        throw error
+      // Adiciona a mensagem localmente primeiro
+      const localMessage: ChatMessage = {
+        userId: currentUserId,
+        userType: 'STUDENT',
+        mensagem: mensagem,
+        timestamp: Date.now()
       }
+
+      set((state) => ({
+        messages: [...state.messages, localMessage]
+      }))
+
+      // Envia para o servidor
+      await chatService.sendMessage({ socketId, mensagem })
     },
 
     disconnectFromChat: () => {

@@ -1,4 +1,4 @@
-import { ArrowLeft, MessageCircle, TrendingUp, Award, Lightbulb, CheckCircle2, AlertCircle } from "lucide-react"
+import { ArrowLeft, MessageCircle, TrendingUp, Lightbulb, CheckCircle2, AlertCircle } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
 import { Progress } from "@/shared/components/ui/progress"
 import { EvolutionChart } from "@/app/home/components/evolution-chart"
@@ -17,7 +17,6 @@ export function CorrectionPanel({ essayText, correctionData, essays, onBack, onO
 
   return (
     <div className="space-y-5">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <Button variant="ghost" onClick={onBack} className="rounded-lg hover:bg-secondary">
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -29,13 +28,9 @@ export function CorrectionPanel({ essayText, correctionData, essays, onBack, onO
         </Button>
       </div>
 
-      {/* Total Score Card - reduced rounding */}
       <div className="glass rounded-xl p-5 gradient-ai-border">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-lg gradient-ai flex items-center justify-center">
-              <Award className="w-5 h-5 text-white" />
-            </div>
             <div>
               <h2 className="text-lg font-semibold text-foreground">Nota final</h2>
               <p className="text-sm text-muted-foreground">Baseada nas 5 competencias do ENEM</p>
@@ -49,7 +44,6 @@ export function CorrectionPanel({ essayText, correctionData, essays, onBack, onO
         <Progress value={(totalScore / 1000) * 100} className="h-2 rounded-full" />
       </div>
 
-      {/* General Feedback */}
       <div className="glass rounded-xl p-5">
         <div className="flex items-center gap-2 mb-3">
           <Lightbulb className="w-5 h-5 text-muted-foreground" />
@@ -58,7 +52,6 @@ export function CorrectionPanel({ essayText, correctionData, essays, onBack, onO
         <p className="text-muted-foreground leading-relaxed text-sm">{generalFeedback}</p>
       </div>
 
-      {/* Strengths and Improvements */}
       <div className="grid md:grid-cols-2 gap-4">
         <div className="glass rounded-xl p-5">
           <div className="flex items-center gap-2 mb-3">
@@ -91,7 +84,6 @@ export function CorrectionPanel({ essayText, correctionData, essays, onBack, onO
         </div>
       </div>
 
-      {/* Competency Scores */}
       <div className="glass rounded-xl p-5">
         <h3 className="font-semibold text-foreground mb-4">Competencias ENEM</h3>
         <div className="space-y-4">
@@ -120,12 +112,9 @@ export function CorrectionPanel({ essayText, correctionData, essays, onBack, onO
         </div>
       </div>
 
-      {/* Grid Layout */}
       <div className="grid lg:grid-cols-2 gap-4">
-        {/* Evolution Chart */}
         <EvolutionChart essays={essays} />
 
-        {/* Essay Preview */}
         <div className="glass rounded-xl p-5">
           <div className="flex items-center gap-2 mb-3">
             <TrendingUp className="w-5 h-5 text-muted-foreground" />
@@ -137,7 +126,6 @@ export function CorrectionPanel({ essayText, correctionData, essays, onBack, onO
         </div>
       </div>
 
-      {/* CTA to chat */}
       <div className="glass rounded-xl p-5 text-center gradient-ai-border">
         <h3 className="font-semibold text-foreground mb-2">Tem duvidas sobre sua correcao?</h3>
         <p className="text-sm text-muted-foreground mb-4">

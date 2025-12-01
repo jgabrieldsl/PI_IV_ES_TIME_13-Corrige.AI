@@ -2,12 +2,8 @@ import {
   ArrowLeft,
   MessageCircle,
   Calendar,
-  FileText,
-  Award,
-  Lightbulb,
   CheckCircle2,
   AlertCircle,
-  TrendingUp,
 } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
 import { Progress } from "@/shared/components/ui/progress"
@@ -45,7 +41,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto px-6 py-8">
-          {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <Button variant="ghost" onClick={onBack} className="rounded-xl hover:bg-secondary cursor-pointer">
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -57,7 +52,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
             </Button>
           </div>
 
-          {/* Essay Info Card */}
           <div className="glass rounded-3xl p-6 mb-6">
             <div className="flex items-start gap-4">
               <div className="flex-1 min-w-0">
@@ -76,7 +70,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
             </div>
           </div>
 
-          {/* Total Score Card */}
           <div className="glass rounded-3xl p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -89,7 +82,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
             <Progress value={(correction.totalScore / 1000) * 100} className="h-2 rounded-full" />
           </div>
 
-          {/* General Feedback */}
           <div className="glass rounded-3xl p-6 mb-6">
             <div className="flex items-center gap-2 mb-4">
               <h3 className="font-semibold text-foreground">Feedback Geral</h3>
@@ -97,7 +89,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
             <p className="text-muted-foreground leading-relaxed">{correction.generalFeedback}</p>
           </div>
 
-          {/* Strengths and Improvements */}
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div className="glass rounded-3xl p-6">
               <div className="flex items-center gap-2 mb-4">
@@ -130,7 +121,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
             </div>
           </div>
 
-          {/* Competency Scores */}
           <div className="glass rounded-3xl p-6 mb-6">
             <h3 className="font-semibold text-foreground mb-5">Competências ENEM</h3>
             <div className="space-y-5">
@@ -159,7 +149,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
             </div>
           </div>
 
-          {/* Essay Preview */}
           <div className="glass rounded-3xl p-6 mb-6">
             <div className="flex items-center gap-2 mb-4">
               <h3 className="font-semibold text-foreground">Sua Redação</h3>
@@ -169,7 +158,6 @@ export function EssayDetailPanel({ essay, onBack, onOpenChat, user }: EssayDetai
             </div>
           </div>
 
-          {/* CTA to chat */}
           <div className="glass rounded-3xl p-6 text-center">
             <h3 className="font-semibold text-foreground mb-2">Tem dúvidas sobre esta correção?</h3>
             <p className="text-sm text-muted-foreground mb-4">

@@ -46,7 +46,7 @@ export function MainContent({ onOpenChat, hasCorrection, onCorrectionComplete, u
         title: "Redação enviada!",
         description: "Sua redação foi enviada para correção com sucesso.",
       })
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro ao enviar",
         description: "Ocorreu um erro ao enviar sua redação. Tente novamente.",
@@ -65,7 +65,7 @@ export function MainContent({ onOpenChat, hasCorrection, onCorrectionComplete, u
           {viewState === "input" && (
             <>
               <WelcomeSection />
-              <FeatureCards hasCorrection={hasCorrection} onOpenChat={onOpenChat} />
+              <FeatureCards hasCorrection={hasCorrection} />
               <EssayInput
                 user={user}
                 onSubmit={handleSubmitEssay}

@@ -5,7 +5,7 @@ import type { LoginCredentials, RegisterCredentials, AuthUser } from '../models'
 interface IAuthController {
     user: AuthUser | null
     loading: boolean
-    error: any | null
+    error: unknown | null
     login: (credentials: LoginCredentials) => Promise<void>
     register: (credentials: RegisterCredentials) => Promise<void>
     logout: () => Promise<void>

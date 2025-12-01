@@ -17,6 +17,7 @@ class EssayServiceImpl {
     }
 
     async uploadEssay(data: ICreateEssay): Promise<Essay> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const response = await this.apiService.post<any>("/api/redacoes/upload", {
             conteudo: data.text,
             userId: data.userId,
@@ -27,6 +28,7 @@ class EssayServiceImpl {
     }
 
     async getUserEssays(userId: string): Promise<Essay[]> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const response = await this.apiService.get<any[]>(`/api/redacoes/usuario/${userId}`)
         const essays = response.map(adaptEssay)
         return essays.sort((a: Essay, b: Essay) => b.date.getTime() - a.date.getTime())
@@ -35,7 +37,9 @@ class EssayServiceImpl {
 
 export const EssayService = new EssayServiceImpl()
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function adaptEssay(backendEssay: any): Essay {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const competencies: CompetencyResult[] = (backendEssay.detalhesCompetencias || []).map((comp: any) => ({
         id: parseInt(comp.competencia.replace("C", "")),
         name: getCompetencyName(comp.competencia),

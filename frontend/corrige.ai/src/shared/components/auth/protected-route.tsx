@@ -3,9 +3,11 @@ import { Navigate } from "react-router-dom"
 import { onAuthStateChanged } from "firebase/auth"
 import { auth } from "@/shared/lib/firebase"
 
+import type { User } from "firebase/auth"
+
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true)
-    const [user, setUser] = useState<any>(null)
+    const [user, setUser] = useState<User | null>(null)
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
