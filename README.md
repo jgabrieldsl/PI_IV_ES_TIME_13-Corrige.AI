@@ -3,23 +3,13 @@ Este projeto desenvolve uma plataforma para correção automatizada de redaçõe
 
 Utilizando APIs de IA para análise de texto, o sistema avalia competências como gramática, coesão, argumentação e proposta de intervenção, simulando os critérios oficiais do ENEM. O backend é implementado em Java para atender a requisitos acadêmicos, e o frontend é construído com React e TypeScript, garantindo uma interface de usuário moderna e responsiva.
 
-## Funcionalidades
-- **Correção Automatizada**: Envio de redações pela plataforma com feedback instantâneo baseado nas competências do ENEM.
-- **Feedback Detalhado**: Análise e comentários sobre gramática, coesão, argumentação e sugestões de melhoria.
-- **Relatórios de Progresso**: Acompanhamento do desempenho do usuário ao longo do tempo, com métricas e gráficos.
-- **Interface Amigável**: Plataforma web responsiva e acessível.
+## Equipe do Projeto
 
-## Tecnologias Utilizadas
-- **Frontend**: React com TypeScript
-- **Backend**: Java (Spring Boot para API RESTful)
-- **Servidor Java**: Servidor de sockets para comunicação em tempo real
-- **Banco de Dados**: MongoDB
-- **Autenticação**: Firebase Authentication
-- **IA**: Integração com APIs externas (Gemini AI)
-- **Fluxo de Versionamento**: Gitflow
-- **Testes**: Implementação de testes unitários e de integração (usando JUnit para Java e Jest para React)
-
----
+| Nome | Papel | Responsabilidades |
+|------|-------|-------------------|
+| **João Gabriel** | Frontend & Integração | Desenvolvimento da interface React, design Figma, integração frontend-backend |
+| **Gabriel Bonatto** | Servidor & Testes | Servidor Java TCP, design Figma, testes automatizados |
+| **Bruno Reitano** | Backend & Integração | API Spring Boot, servidor Java, integração com IA e MongoDB |
 
 ## Como Rodar o Projeto
 
@@ -63,7 +53,7 @@ O frontend é a interface do usuário.
 cd frontend/corrige.ai
 
 # Instale as dependências (primeira vez)
-yarn install
+yarn
 
 # Execute o servidor de desenvolvimento
 yarn dev
@@ -87,6 +77,107 @@ O frontend estará disponível em: **http://localhost:5173**
    - Total de usuários conectados
 4. Abra outra aba e conecte novamente - o contador aumentará
 5. Clique em **"Desconectar"** para fechar a conexão
+
+---
+
+## Arquitetura do Sistema
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           CAMADA DE APRESENTAÇÃO                        │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                    Frontend (React + TypeScript)                  │  │
+│  │  • Vite + React + Tailwind CSS                                    │  │
+│  │  • Zustand (State Management - MVC)                               │  │
+│  │  • Firebase Authentication                                        │  │
+│  │  • Porta: 5173                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ HTTP/REST + SSE
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          CAMADA DE APLICAÇÃO                            │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │              Backend Spring Boot (Java)                           │  │
+│  │  • API RESTful                                                    │  │
+│  │  • Integração com Gemini AI                                       │  │
+│  │  • Gerenciamento de Conexões TCP                                  │  │
+│  │  • Server-Sent Events (SSE) para Chat                             │  │
+│  │  • Porta: 8080                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────┘
+                │                                    │
+                │ TCP Socket                         │ HTTP/REST
+                ▼                                    ▼
+┌──────────────────────────────┐    ┌──────────────────────────────────┐
+│   SERVIDOR JAVA (TCP)        │    │        BANCO DE DADOS            │
+│  ┌────────────────────────┐  │    │  ┌────────────────────────────┐  │
+│  │  Servidor de Sockets   │  │    │  │        MongoDB             │  │
+│  │  • Chat em Tempo Real  │  │    │  │  • Redações                │  │
+│  │  • Broadcast Messages  │  │    │  │  • Correções               │  │
+│  │  • Pool de Conexões    │  │    │  │  • Usuários (metadata)     │  │
+│  │  • Porta: 3001         │  │    │  │  • Histórico               │  │
+│  └────────────────────────┘  │    │  └────────────────────────────┘  │
+└──────────────────────────────┘    └──────────────────────────────────┘
+                                                    │
+                                                    │
+                                    ┌───────────────┴──────────────┐
+                                    │                              │
+                                    ▼                              ▼
+                        ┌────────────────────┐      ┌────────────────────┐
+                        │  Firebase Auth     │      │   Gemini AI API    │
+                        │  (Autenticação)    │      │   (Correção IA)    │
+                        └────────────────────┘      └────────────────────┘
+```
+
+### Fluxo de Dados
+
+1. **Autenticação**: Frontend ↔ Firebase Auth
+2. **Envio de Redação**: Frontend ↔ Backend ↔ Gemini AI → Backend →MongoDB
+3. **Chat em Tempo Real**: Frontend ↔ Backend ↔ Servidor TCP (broadcast)
+4. **Consulta de Redações**: Frontend ↔ Backend ↔ MongoDB
+
+### Relacionamento com Bancos de Dados
+
+- **MongoDB**: Banco principal para armazenamento de redações, correções e metadados de usuários
+- **Firebase**: Gerenciamento de autenticação (não armazena dados de redações)
+- **Sem banco relacional**: O projeto utiliza apenas MongoDB (NoSQL) para persistência de dados
+
+## Funcionalidades
+- **Correção Automatizada**: Envio de redações pela plataforma com feedback instantâneo baseado nas competências do ENEM.
+- **Feedback Detalhado**: Análise e comentários sobre gramática, coesão, argumentação e sugestões de melhoria.
+- **Relatórios de Progresso**: Acompanhamento do desempenho do usuário ao longo do tempo, com métricas e gráficos.
+- **Interface Amigável**: Plataforma web responsiva e acessível.
+
+## Tecnologias Utilizadas
+
+### Frontend
+- **Framework**: React com TypeScript
+- **Build Tool**: Vite
+- **Estilização**: Tailwind CSS
+- **Componentes UI**: Shadcn UI
+- **Roteamento**: React Router DOM
+- **Gerenciamento de Estado**: Zustand (MVC Architecture)
+- **Formulários**: React Hook Form + Zod
+- **Requisições HTTP**: Axios
+- **Ícones**: Lucide React
+
+### Backend
+- **API REST**: Spring Boot (Java)
+- **Servidor de Sockets**: Java TCP Server (porta 3001)
+- **Banco de Dados**: MongoDB
+- **Autenticação**: Firebase Authentication
+- **IA**: Gemini AI (Google)
+
+### Ferramentas de Desenvolvimento
+- **Fluxo de Versionamento**: Gitflow
+- **Testes**: JUnit (Java), Jest (React)
+- **Gerenciador de Pacotes**: Yarn (Frontend), Maven (Backend/Servidor)
+
+
+---
+
 ---
 
 ## 2º Entrega - Sistema de Comunicação em Tempo Real
@@ -196,23 +287,30 @@ data: {
 
 ---
 
-## 3º Entrega - Documentação e novas implementações
+## 3º Entrega - Autenticação e API Backend
 
 ### 1. Sistema de Autenticação (Firebase)
 
-O frontend utiliza **Firebase Authentication** para gerenciar login, cadastro e sessões de usuários de forma segura e escalável.
+O frontend utiliza **Firebase Authentication** para gerenciar autenticação e sessões de usuários de forma segura e escalável.
 
 #### Funcionalidades Implementadas
-- **Cadastro de Usuário (Sign Up)**: Validação de email/senha, criação de conta e redirecionamento.
-- **Login de Usuário**: Autenticação, persistência de sessão e tratamento de erros.
-- **Logout**: Encerramento seguro da sessão.
-- **Proteção de Rotas**: Context API e Hooks para controle de acesso.
+- **Cadastro de Usuário (Register)**: Registro com email e senha, validação e redirecionamento automático.
+- **Login de Usuário**: Autenticação com persistência de sessão e tratamento de erros.
+- **Recuperação de Senha (Forgot Password)**: Envio de email para redefinição de senha via Firebase.
+- **Logout**: Encerramento seguro da sessão do usuário.
+- **Proteção de Rotas**: Context API e componente `ProtectedRoute` para controle de acesso.
 
-#### Estrutura
-- `src/app/auth/`: Contém contexts, services, models e views de autenticação.
-- `src/shared/lib/firebase.ts`: Configuração do Firebase.
+#### Arquitetura MVC
+- **Models**: `src/app/auth/models/` - Interfaces e tipos de autenticação
+- **Controllers**: `src/app/auth/controllers/AuthController.ts` - Gerenciamento de estado com Zustand
+- **Services**: `src/app/auth/services/AuthService.ts` - Integração com Firebase Auth
+- **Views**: `src/app/auth/login/`, `src/app/auth/register/`, `src/app/auth/forgot-password/`
 
----
+#### Rotas de Autenticação
+- `/auth/login` - Página de login
+- `/auth/register` - Página de cadastro
+- `/auth/forgot-password` - Página de recuperação de senha
+
 
 ### 2. API de Correção de Redações
 
@@ -221,18 +319,119 @@ O sistema integra com a **Gemini AI** para correção automatizada de redações
 #### Exemplo de Payload (POST)
 ```json
 {
-  "conteudo": "Texto da redação...",
-  "userId": "user123"
+  "conteudo": "A educação no Brasil enfrenta desafios significativos...",
+  "userId": "abc123xyz",
+  "titulo": "Desafios da Educação no Brasil",
+  "tema": "Educação"
 }
 ```
+
+---
+
+## 4º Entrega - Frontend finalizado e Integração Total
+
+Esta entrega foca na modernização completa da interface do usuário e na integração final entre todos os sistemas (Auth, Chat, Correção).
+
+### 1. Modernização do Frontend (Vite + React)
+
+O frontend foi migrado e refatorado para utilizar as tecnologias mais recentes:
+- **Vite**: Build ultra-rápido e HMR instantâneo
+- **React**: Utilização de novos hooks e patterns
+- **Tailwind CSS**: Estilização moderna e performática
+- **Shadcn UI**: Componentes acessíveis e customizáveis
+
+### 2. Sistema de Gerenciamento de Redações (MVC)
+
+O sistema utiliza uma arquitetura **MVC com Zustand** para gerenciar o estado das redações de forma centralizada e eficiente.
+
+#### Arquitetura MVC
+- **Models** (`src/app/home/models/EssayModel.ts`):
+  - `Essay` - Estrutura completa da redação
+  - `CorrectionResult` - Resultado da correção
+  - `CompetencyResult` - Avaliação por competência
+  - `ICreateEssayRequest` - Payload para envio de redação
+
+- **Controllers** (`src/app/home/controllers/EssayController.ts`):
+  - Gerenciamento de estado com Zustand
+  - Cache de redações do usuário
+  - Estado de loading e erros
+  - Ações: `loadUserEssays()`, `uploadEssay()`, `selectEssay()`
+
+- **Services** (`src/app/home/services/EssayService.ts`):
+  - Comunicação com API REST
+  - Adaptação de dados backend → frontend
+  - Endpoints: `/api/redacoes/upload`, `/api/redacoes/usuario/{userId}`
+
+- **Views** (`src/app/home/components/pages/`):
+  - `MainContent` - Tela principal com input de redação
+  - `EssaysHistoryPage` - Histórico de redações
+  - `EssayDetailPanel` - Detalhes e feedback da correção
+
+### 3. Integração do Chat em Tempo Real
+
+O chat foi totalmente integrado ao frontend utilizando **Server-Sent Events (SSE)** para comunicação em tempo real.
+
+#### Funcionalidades
+- **Modo Professor**: Alternância entre modo aluno e professor
+- **Mensagens em Tempo Real**: Comunicação bidirecional via SSE
+- **Deduplicação**: Prevenção de mensagens duplicadas no frontend
+- **Desconexão Manual**: Controle total da conexão
+
+#### Arquitetura Frontend
+- **Controller** (`ChatController.ts`): Gerenciamento de estado com Zustand
+- **Service** (`ChatService.ts`): Conexão SSE e envio de mensagens
+- **View** (`ProfessorChat.tsx`): Interface do chat com alternância de modo
+
 
 #### Exemplo de Resposta
 ```json
 {
+  "id": "674a1b2c3d4e5f6g7h8i9j0k",
+  "titulo": "Desafios da Educação no Brasil",
+  "conteudo": "A educação no Brasil enfrenta desafios...",
+  "dataEnvio": "2024-12-01T03:30:00.000Z",
   "status": "CORRIGIDA",
-  "pontuacaoTotal": 800,
-  "feedbackGeral": "Texto bem estruturado...",
-  "detalhesCompetencias": [ ... ]
+  "pontuacaoTotal": 840,
+  "feedbackGeral": "Texto bem estruturado com argumentação consistente. A redação apresenta domínio da norma culta e boa articulação de ideias. Pontos a melhorar: maior aprofundamento na proposta de intervenção e uso de repertório sociocultural mais diversificado.",
+  "pontosFortes": [
+    "Excelente domínio da norma padrão da língua portuguesa",
+    "Boa articulação entre os parágrafos com uso adequado de conectivos",
+    "Argumentação clara e bem fundamentada com dados do IBGE",
+    "Proposta de intervenção presente e alinhada com a discussão"
+  ],
+  "pontosMelhoria": [
+    "Aprofundar a proposta de intervenção com mais detalhes sobre execução",
+    "Incluir repertório sociocultural mais diversificado (citações, referências culturais)",
+    "Explorar melhor a relação entre os problemas apresentados",
+    "Desenvolver mais o último parágrafo com exemplos concretos"
+  ],
+  "detalhesCompetencias": [
+    {
+      "competencia": "C1",
+      "pontuacao": 180,
+      "comentario": "Demonstra excelente domínio da modalidade escrita formal da língua portuguesa. Poucos desvios gramaticais."
+    },
+    {
+      "competencia": "C2",
+      "pontuacao": 160,
+      "comentario": "Compreende bem a proposta e aplica conceitos de várias áreas do conhecimento. Poderia explorar repertório mais diversificado."
+    },
+    {
+      "competencia": "C3",
+      "pontuacao": 160,
+      "comentario": "Seleciona e organiza informações de forma consistente. Argumentação clara com dados relevantes."
+    },
+    {
+      "competencia": "C4",
+      "pontuacao": 180,
+      "comentario": "Articula bem as partes do texto com uso adequado de conectivos e progressão temática coerente."
+    },
+    {
+      "competencia": "C5",
+      "pontuacao": 160,
+      "comentario": "Elabora proposta de intervenção relacionada ao tema. Poderia detalhar melhor os meios de execução."
+    }
+  ]
 }
 ```
 
@@ -293,8 +492,9 @@ mvn clean test
 
 | Método | Endpoint | Descrição | Request Body | Response |
 |--------|----------|-----------|--------------|----------|
-| **POST** | `/api/redacoes/upload` | Envia redação para correção | `{ conteudo: "texto", userId: "id" }` | Objeto `Redacao` com feedback e nota |
+| **POST** | `/api/redacoes/upload` | Envia redação para correção | `{ conteudo: "texto", userId: "id", titulo: "título", tema: "tema" }` | Objeto `Redacao` com feedback e nota |
 | **GET** | `/api/redacoes/{id}` | Busca redação por ID | - | Objeto `Redacao` |
+| **GET** | `/api/redacoes/usuario/{userId}` | Busca todas as redações de um usuário | - | Array de objetos `Redacao` |
 
 
 ### Exemplos de Uso com cURL
@@ -305,8 +505,10 @@ mvn clean test
 curl -X POST http://localhost:8080/api/redacoes/upload \
   -H "Content-Type: application/json" \
   -d '{
-    "conteudo": " ... ",
-    "userId": " ... "
+    "conteudo": "Texto da redação...",
+    "userId": "user123",
+    "titulo": "Desafios da Educação no Brasil",
+    "tema": "Educação"
   }'
 ```
 
@@ -314,6 +516,104 @@ curl -X POST http://localhost:8080/api/redacoes/upload \
 
 ```bash
 curl -X GET http://localhost:8080/api/redacoes/id_da_redacao
+```
+
+#### 3. Buscar Redações de um Usuário
+
+```bash
+curl -X GET http://localhost:8080/api/redacoes/usuario/id_do_usuario
+```
+
+```
+
+---
+
+## Modelos de Dados
+
+### 1. Redação (Essay)
+
+```typescript
+interface Essay {
+  id: string                      // ID único da redação
+  title: string                   // Título da redação
+  text: string                    // Conteúdo completo
+  date: Date                      // Data de envio
+  correction: CorrectionResult    // Resultado da correção
+}
+```
+
+### 2. Resultado da Correção (CorrectionResult)
+
+```typescript
+interface CorrectionResult {
+  totalScore: number              // Pontuação total (0-1000)
+  competencies: CompetencyResult[] // Avaliação por competência
+  generalFeedback: string         // Feedback geral
+  strengths: string[]             // Pontos fortes
+  improvements: string[]          // Pontos a melhorar
+}
+```
+
+### 3. Competência (CompetencyResult)
+
+```typescript
+interface CompetencyResult {
+  id: number                      // ID da competência (1-5)
+  name: string                    // Nome da competência
+  score: number                   // Pontuação (0-200)
+  maxScore: number                // Pontuação máxima (200)
+  description: string             // Descrição da competência
+  color: string                   // Cor para visualização
+  feedback: string                // Feedback específico
+}
+```
+
+### 4. Requisição de Criação de Redação (ICreateEssayRequest)
+
+```typescript
+interface ICreateEssayRequest {
+  title: string                   // Título da redação
+  text: string                    // Conteúdo da redação
+  theme: string                   // Tema escolhido
+  userId: string                  // ID do usuário (Firebase)
+}
+```
+
+### 5. Mensagem de Chat (ChatMessage)
+
+```typescript
+interface ChatMessage {
+  userId: string                  // ID do usuário
+  userType: 'STUDENT' | 'TEACHER' // Tipo de usuário
+  mensagem: string                // Conteúdo da mensagem
+  timestamp: number               // Timestamp da mensagem
+  email?: string                  // Email (opcional)
+}
+```
+
+### 6. Estrutura MongoDB - Redação
+
+```json
+{
+  "_id": "ObjectId",
+  "titulo": "string",
+  "conteudo": "string",
+  "tema": "string",
+  "userId": "string",
+  "dataEnvio": "ISODate",
+  "status": "CORRIGIDA",
+  "pontuacaoTotal": 840,
+  "feedbackGeral": "string",
+  "pontosFortes": ["string"],
+  "pontosMelhoria": ["string"],
+  "detalhesCompetencias": [
+    {
+      "competencia": "C1",
+      "pontuacao": 180,
+      "comentario": "string"
+    }
+  ]
+}
 ```
 
 ---
