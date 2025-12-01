@@ -58,7 +58,7 @@ export function MainContent({ onOpenChat, hasCorrection, onCorrectionComplete, u
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden">
-      <UserHeader user={user} />
+      <UserHeader user={user} onOpenChat={onOpenChat} />
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto px-6 py-8">

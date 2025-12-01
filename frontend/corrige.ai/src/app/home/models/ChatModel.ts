@@ -3,6 +3,7 @@ export interface ChatMessage {
   userType: string
   mensagem: string
   timestamp: number
+  email?: string
 }
 
 export interface SendMessageRequest {

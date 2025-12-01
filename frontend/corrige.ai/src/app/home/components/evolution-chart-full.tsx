@@ -6,7 +6,6 @@ interface EvolutionChartFullProps {
 }
 
 export function EvolutionChartFull({ essays }: EvolutionChartFullProps) {
-  // Sort essays by date and take last 10
   const sortedEssays = [...essays].sort((a, b) => a.date.getTime() - b.date.getTime()).slice(-10)
 
   const chartData = sortedEssays.map((essay, index) => ({

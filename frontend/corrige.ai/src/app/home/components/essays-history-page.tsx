@@ -63,7 +63,7 @@ export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHis
   if (isLoading) {
     return (
       <main className="flex-1 flex flex-col overflow-hidden">
-        <UserHeader user={user} />
+        <UserHeader user={user} onOpenChat={onOpenChat} />
         <div className="flex-1 flex items-center justify-center">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
@@ -73,7 +73,7 @@ export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHis
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden">
-      <UserHeader user={user} />
+      <UserHeader user={user} onOpenChat={onOpenChat} />
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-6xl mx-auto px-6 py-8">
