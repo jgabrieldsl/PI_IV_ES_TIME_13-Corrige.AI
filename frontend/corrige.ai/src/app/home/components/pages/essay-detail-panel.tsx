@@ -7,9 +7,9 @@ import {
 } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
 import { Progress } from "@/shared/components/ui/progress"
-import { UserHeader } from "./user-header"
 import type { Essay } from "@/shared/lib/types"
 import type { User } from "firebase/auth"
+import { UserHeader } from "../user-header"
 
 interface EssayDetailPanelProps {
   essay: Essay
