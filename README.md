@@ -524,8 +524,6 @@ curl -X GET http://localhost:8080/api/redacoes/id_da_redacao
 curl -X GET http://localhost:8080/api/redacoes/usuario/id_do_usuario
 ```
 
-```
-
 ---
 
 ## Modelos de Dados
