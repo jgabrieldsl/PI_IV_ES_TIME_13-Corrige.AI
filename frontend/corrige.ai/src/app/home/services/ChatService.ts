@@ -12,7 +12,6 @@ export class ChatService {
     await this.apiService.post('/api/chat/send', request)
   }
 
-  // Conecta ao stream SSE de mensagens
   connectToMessageStream(socketId: string, onMessage: (message: ChatMessage) => void): EventSource {
     const baseUrl = import.meta.env.VITE_API_BASE_URL
     const eventSource = new EventSource(`${baseUrl}/api/chat/stream/${socketId}`)

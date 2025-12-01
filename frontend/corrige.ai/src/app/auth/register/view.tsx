@@ -13,7 +13,7 @@ import { useRegister } from "../hooks/useRegister"
 import { useEffect } from "react"
 
 export default function RegisterPage() {
-    const [ showPassword, setShowPassword ] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
     const { form, handleRegister, loading, error, clearError } = useRegister()
     const { register, control, watch, formState: { errors } } = form
     const { toast } = useToast()
@@ -36,7 +36,7 @@ export default function RegisterPage() {
             })
             clearError()
         }
-    }, [ error, toast, clearError ])
+    }, [error, toast, clearError])
 
     return (
         <div className="min-h-screen flex">
@@ -46,9 +46,6 @@ export default function RegisterPage() {
                 <div className="relative z-10 flex flex-col justify-between p-12 w-full">
                     <div>
                         <Link to="/" className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-background flex items-center justify-center">
-                                <Sparkles className="w-5 h-5 text-foreground" />
-                            </div>
                             <span className="text-2xl font-semibold text-background tracking-tight">Corrige.AI</span>
                         </Link>
                     </div>
@@ -80,7 +77,7 @@ export default function RegisterPage() {
 
                     <div className="flex items-center gap-4">
                         <div className="flex -space-x-2">
-                            {[ 1, 2, 3, 4 ].map((i) => (
+                            {[1, 2, 3, 4].map((i) => (
                                 <div
                                     key={i}
                                     className="w-8 h-8 rounded-full bg-background/30 border-2 border-foreground flex items-center justify-center text-xs text-background font-medium"

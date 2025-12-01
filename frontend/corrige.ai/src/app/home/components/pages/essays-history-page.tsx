@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState } from "react"
 import { FileText, Calendar, TrendingUp, Search, ArrowUpRight, MessageCircle, Loader2 } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
@@ -6,8 +6,7 @@ import { UserHeader } from "@/app/home/components/user-header"
 import { EvolutionChartFull } from "@/app/home/components/evolution-chart-full"
 import type { Essay } from "@/shared/lib/types"
 import type { User } from "firebase/auth"
-import { EssayService } from "@/app/home/services/EssayService"
-import { useToast } from "@/shared/hooks/use-toast"
+import { useEssayController } from "@/app/home/controllers"
 
 interface EssaysHistoryPageProps {
   onSelectEssay: (essay: Essay) => void
@@ -16,34 +15,9 @@ interface EssaysHistoryPageProps {
 }
 
 export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHistoryPageProps) {
-  const [ searchQuery, setSearchQuery ] = useState("")
-  const [ essays, setEssays ] = useState<Essay[]>([])
-  const [ isLoading, setIsLoading ] = useState(true)
-  const { toast } = useToast()
+  const [searchQuery, setSearchQuery] = useState("")
 
-  const loadEssays = useCallback(async () => {
-    try {
-      setIsLoading(true)
-      if (user?.uid) {
-        const data = await EssayService.getUserEssays(user.uid)
-        setEssays(data)
-      }
-    } catch {
-      toast({
-        title: "Erro ao carregar redações",
-        description: "Não foi possível carregar seu histórico. Tente novamente.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }, [ user, toast ])
-
-  useEffect(() => {
-    if (user) {
-      loadEssays()
-    }
-  }, [ user, loadEssays ])
+  const { essays, loading } = useEssayController()
 
   const filteredEssays = essays.filter((essay) => essay.title.toLowerCase().includes(searchQuery.toLowerCase()))
 
@@ -60,7 +34,7 @@ export function EssaysHistoryPage({ onSelectEssay, onOpenChat, user }: EssaysHis
 
   const bestScore = essays.length > 0 ? Math.max(...essays.map((essay) => essay.correction.totalScore)) : 0
 
-  if (isLoading) {
+  if (loading) {
     return (
       <main className="flex-1 flex flex-col overflow-hidden">
         <UserHeader user={user} onOpenChat={onOpenChat} />

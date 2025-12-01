@@ -44,9 +44,6 @@ export default function ForgotPasswordPage() {
                 <div className="relative z-10 flex flex-col justify-between p-12 w-full">
                     <div>
                         <Link to="/" className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-background flex items-center justify-center">
-                                <Sparkles className="w-5 h-5 text-foreground" />
-                            </div>
                             <span className="text-2xl font-semibold text-background tracking-tight">Corrige.AI</span>
                         </Link>
                     </div>

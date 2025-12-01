@@ -6,7 +6,7 @@ interface EvolutionChartFullProps {
 }
 
 export function EvolutionChartFull({ essays }: EvolutionChartFullProps) {
-  const sortedEssays = [ ...essays ].sort((a, b) => a.date.getTime() - b.date.getTime()).slice(-10)
+  const sortedEssays = [...essays].sort((a, b) => a.date.getTime() - b.date.getTime()).slice(-10)
 
   const chartData = sortedEssays.map((essay, index) => ({
     label: `R${index + 1}`,
@@ -29,7 +29,7 @@ export function EvolutionChartFull({ essays }: EvolutionChartFullProps) {
       <div className="glass rounded-xl p-5">
         <h3 className="font-semibold text-foreground mb-4">Evolução de notas</h3>
         <div className="h-48 flex items-center justify-center text-muted-foreground">
-          Envie redacoes para ver sua evolucao
+          Envie redações para ver sua evolução
         </div>
       </div>
     )
@@ -40,7 +40,7 @@ export function EvolutionChartFull({ essays }: EvolutionChartFullProps) {
       <div className="flex items-center justify-between mb-5">
         <div>
           <h3 className="font-semibold text-foreground">Evolução de notas</h3>
-          <p className="text-sm text-muted-foreground">Ultimas {chartData.length} redacoes</p>
+          <p className="text-sm text-muted-foreground">Últimas {chartData.length} redações</p>
         </div>
         <div className="flex items-center gap-1 text-sm">
           {isPositive ? <TrendingUp className="w-4 h-4 text-emerald-500" /> : <TrendingDown className="w-4 h-4 text-rose-500" />}
@@ -54,6 +54,11 @@ export function EvolutionChartFull({ essays }: EvolutionChartFullProps) {
         {chartData.map((data, index) => {
           const height = ((data.score - minDisplayScore) / (maxScore - minDisplayScore)) * 100
           const isLast = index === chartData.length - 1
+          const getScoreColor = (score: number, isRecent: boolean) => {
+            if (score >= 900) return isRecent ? "bg-emerald-500" : "bg-emerald-500/30"
+            if (score >= 600) return isRecent ? "bg-amber-500" : "bg-amber-500/30"
+            return isRecent ? "bg-red-500" : "bg-red-500/30"
+          }
 
           return (
             <div key={index} className="flex-1 flex flex-col items-center gap-2 group relative">
@@ -66,8 +71,7 @@ export function EvolutionChartFull({ essays }: EvolutionChartFullProps) {
 
               <div className="w-full h-48 flex items-end">
                 <div
-                  className={`w-full rounded-t-lg transition-all duration-500 cursor-pointer hover:opacity-80 ${isLast ? "gradient-ai" : "bg-foreground/30"
-                    }`}
+                  className={`w-full rounded-t-lg transition-all duration-500 cursor-pointer hover:opacity-80 ${getScoreColor(data.score, isLast)}`}
                   style={{ height: `${height}%` }}
                 />
               </div>
@@ -77,15 +81,18 @@ export function EvolutionChartFull({ essays }: EvolutionChartFullProps) {
         })}
       </div>
 
-      {/* Legend - simplified neutral */}
-      <div className="flex items-center justify-center gap-6 mt-5 pt-4 border-t border-border/50">
+      <div className="flex items-center justify-center gap-4 mt-5 pt-4 border-t border-border/50 flex-wrap">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full gradient-ai" />
-          <span className="text-xs text-muted-foreground">Mais recente</span>
+          <div className="w-3 h-3 rounded-full bg-emerald-500" />
+          <span className="text-xs text-muted-foreground">900+ pontos</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-foreground/30" />
-          <span className="text-xs text-muted-foreground">Anteriores</span>
+          <div className="w-3 h-3 rounded-full bg-amber-500" />
+          <span className="text-xs text-muted-foreground">600-899 pontos</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-red-500" />
+          <span className="text-xs text-muted-foreground">Abaixo de 600</span>
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@ export function Sidebar({ currentView, onNavigate, essays, onSelectEssay, user }
   }
 
   return (
-    <aside className="w-72 h-full bg-sidebar/60 backdrop-blur-md flex flex-col">
+    <aside className="w-72 h-full bg-sidebar/85 backdrop-blur-md flex flex-col">
       <div className="p-5 flex items-center justify-between">
         <button
           onClick={() => onNavigate("home")}

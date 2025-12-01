@@ -1,14 +1,8 @@
 import { ApiService } from "@/shared/api"
-import type { Essay, CorrectionResult, CompetencyResult } from "@/shared/lib/types"
+import type { Essay, CorrectionResult, CompetencyResult, ICreateEssayRequest } from "../models"
 import { COMPETENCY_NAMES, COMPETENCY_DESCRIPTIONS } from "@/shared/lib/constants"
 
-export interface ICreateEssay {
-    title: string
-    text: string
-    theme: string
-    userId: string
-}
-
+// Serviço para gerenciar requisições de redações
 class EssayServiceImpl {
     private apiService: ApiService
 
@@ -16,7 +10,8 @@ class EssayServiceImpl {
         this.apiService = new ApiService()
     }
 
-    async uploadEssay(data: ICreateEssay): Promise<Essay> {
+    // Envia uma redação para correção
+    async uploadEssay(data: ICreateEssayRequest): Promise<Essay> {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const response = await this.apiService.post<any>("/api/redacoes/upload", {
             conteudo: data.text,
@@ -27,18 +22,22 @@ class EssayServiceImpl {
         return adaptEssay(response)
     }
 
+    // Busca todas as redações de um usuário
     async getUserEssays(userId: string): Promise<Essay[]> {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const response = await this.apiService.get<any[]>(`/api/redacoes/usuario/${userId}`)
         const essays = response.map(adaptEssay)
+        // Ordena por data (mais recente primeiro)
         return essays.sort((a: Essay, b: Essay) => b.date.getTime() - a.date.getTime())
     }
 }
 
 export const EssayService = new EssayServiceImpl()
 
+// Adapta a resposta do backend para o formato do frontend
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function adaptEssay(backendEssay: any): Essay {
+    // Mapeia as competências do backend para o formato do frontend
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const competencies: CompetencyResult[] = (backendEssay.detalhesCompetencias || []).map((comp: any) => ({
         id: parseInt(comp.competencia.replace("C", "")),
@@ -50,6 +49,7 @@ function adaptEssay(backendEssay: any): Essay {
         feedback: comp.comentario,
     }))
 
+    // Monta o objeto de correção
     const correction: CorrectionResult = {
         totalScore: backendEssay.pontuacaoTotal || 0,
         competencies: competencies,
@@ -58,6 +58,7 @@ function adaptEssay(backendEssay: any): Essay {
         improvements: backendEssay.pontosMelhoria || [],
     }
 
+    // Retorna a redação no formato do frontend
     return {
         id: backendEssay.id,
         title: backendEssay.titulo || "Sem título",

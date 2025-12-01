@@ -5,12 +5,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/
 import { useToast } from "@/shared/hooks/use-toast"
 import type { User } from "firebase/auth"
 
-import { type ICreateEssay } from "@/app/home/services/EssayService"
+import { type ICreateEssayRequest } from "@/app/home/models"
 import { ESSAY_THEMES } from "@/shared/lib/constants"
 
 interface EssayInputProps {
   user: User | null
-  onSubmit: (data: ICreateEssay) => void
+  onSubmit: (data: ICreateEssayRequest) => void
 }
 
 export function EssayInput({ user, onSubmit }: EssayInputProps) {

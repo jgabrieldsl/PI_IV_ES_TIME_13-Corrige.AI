@@ -1,58 +1,43 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { Sidebar } from "@/app/home/components/sidebar"
-import { MainContent } from "@/app/home/components/main-content"
-import { EssaysHistoryPage } from "@/app/home/components/essays-history-page"
-import { EssayDetailPanel } from "@/app/home/components/essay-detail-panel"
 import { ProfessorChat } from "@/app/home/components/professor-chat"
-import { type Essay, type AppView } from "@/shared/lib/types"
+import { type AppView, type Essay } from "@/shared/lib/types"
 import { useAuth } from "@/app/auth/contexts/auth-context"
-import { EssayService } from "./services/EssayService"
+import { useEssayController } from "@/app/home/controllers"
 import { useTheme } from "@/shared/components/theme-provider"
 import { Aurora } from "@/shared/components/ui/aurora-background"
 
-export default function Home() {
-  const [ isChatOpen, setIsChatOpen ] = useState(false)
-  const [ hasCorrection, setHasCorrection ] = useState(false)
-  const [ currentView, setCurrentView ] = useState<AppView>("home")
-  const [ selectedEssay, setSelectedEssay ] = useState<Essay | null>(null)
-  const [ essays, setEssays ] = useState<Essay[]>([])
-  const { resolvedTheme } = useTheme()
+import { EssayDetailPanel, EssaysHistoryPage, MainContent } from "./components/pages"
 
+export default function Home() {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+  const [currentView, setCurrentView] = useState<AppView>("home")
+  const { resolvedTheme } = useTheme()
   const { user } = useAuth()
 
-  const loadEssays = useCallback(async () => {
-    if (user?.uid) {
-      try {
-        const data = await EssayService.getUserEssays(user.uid)
-        setEssays(data)
-        setHasCorrection(data.length > 0)
-      } catch (error) {
-        console.error("Failed to load essays", error)
-      }
-    }
-  }, [ user ])
+  // Usa o controlador Zustand para gerenciar estado das redações
+  const { essays, currentEssay, loadUserEssays, selectEssay } = useEssayController()
 
+  // Carrega as redações do usuário ao montar o componente
   useEffect(() => {
-    if (user) {
-      loadEssays()
+    if (user?.uid) {
+      loadUserEssays(user.uid)
     }
-  }, [ user, loadEssays ])
+  }, [user, loadUserEssays])
 
+  // Seleciona uma redação e navega para a tela de detalhes
   const handleSelectEssay = (essay: Essay) => {
-    setSelectedEssay(essay)
+    selectEssay(essay)
     setCurrentView("essay-detail")
   }
 
-  const handleNewEssayComplete = () => {
-    loadEssays()
-    setHasCorrection(true)
-  }
+  const hasCorrection = essays.length > 0
 
   return (
     <div className="relative flex h-screen bg-background overflow-hidden">
       {resolvedTheme === "dark" && (
         <Aurora
-          colorStops={[ "#3A29FF", "#FF94B4", "#FF3232" ]}
+          colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
           blend={0.5}
           amplitude={1.0}
           speed={0.5}
@@ -72,7 +57,6 @@ export default function Home() {
           <MainContent
             onOpenChat={() => setIsChatOpen(true)}
             hasCorrection={hasCorrection}
-            onCorrectionComplete={handleNewEssayComplete}
             user={user}
             essays={essays}
           />
@@ -86,9 +70,9 @@ export default function Home() {
           />
         )}
 
-        {currentView === "essay-detail" && selectedEssay && (
+        {currentView === "essay-detail" && currentEssay && (
           <EssayDetailPanel
-            essay={selectedEssay}
+            essay={currentEssay}
             onBack={() => setCurrentView("history")}
             onOpenChat={() => setIsChatOpen(true)}
             user={user}

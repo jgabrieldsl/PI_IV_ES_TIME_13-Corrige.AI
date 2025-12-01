@@ -3,8 +3,7 @@ import type { ChatMessage } from '../models'
 import { ChatService } from '../services'
 import { ApiService } from '@/shared/api'
 
-
-
+// Interface do controlador de chat
 interface IChatController {
   messages: ChatMessage[]
   eventSource: EventSource | null
@@ -40,19 +39,19 @@ export const useChatController = create<IChatController>()((set, get) => {
     connectToChat: (socketId: string) => {
       const { eventSource } = get()
 
-      // Fecha conexão anterior se existir
+      // Fecha conexão SSE anterior se existir
       if (eventSource) {
         eventSource.close()
       }
 
-      // Conecta ao stream SSE
+      // Conecta ao stream SSE para receber mensagens em tempo real
       const newEventSource = chatService.connectToMessageStream(socketId, (message) => {
         const { currentUserId } = get()
 
         const { messages } = get()
         const lastMessage = messages[messages.length - 1]
 
-        // Duplicacao tratamento
+        // Tratamento de duplicação de mensagens
         if (lastMessage &&
           lastMessage.timestamp === message.timestamp &&
           lastMessage.userId === message.userId &&
@@ -60,9 +59,10 @@ export const useChatController = create<IChatController>()((set, get) => {
           return
         }
 
+        // Adiciona mensagem apenas se não for do usuário atual
         if (String(message.userId) !== String(currentUserId)) {
           set((state) => ({
-            messages: [ ...state.messages, message ]
+            messages: [...state.messages, message]
           }))
         }
       })
@@ -76,7 +76,7 @@ export const useChatController = create<IChatController>()((set, get) => {
     sendMessage: async (socketId: string, mensagem: string, email?: string) => {
       const { currentUserId, currentUserType } = get()
 
-      // Adiciona a mensagem localmente primeiro
+      // Adiciona a mensagem localmente antes de enviar ao servidor
       const localMessage: ChatMessage = {
         userId: currentUserId,
         userType: currentUserType,
@@ -86,10 +86,10 @@ export const useChatController = create<IChatController>()((set, get) => {
       }
 
       set((state) => ({
-        messages: [ ...state.messages, localMessage ]
+        messages: [...state.messages, localMessage]
       }))
 
-      // Envia para o servidor
+      // Envia mensagem para o servidor via API
       await chatService.sendMessage({ socketId, mensagem })
     },
 

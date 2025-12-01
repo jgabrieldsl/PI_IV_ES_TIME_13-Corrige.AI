@@ -100,12 +100,7 @@ export function CorrectionPanel({ essayText, correctionData, essays, onBack, onO
                   {comp.score}/{comp.maxScore}
                 </span>
               </div>
-              <div className="relative h-2 bg-muted rounded-full overflow-hidden">
-                <div
-                  className="absolute top-0 left-0 h-full rounded-full bg-foreground/60 transition-all duration-500"
-                  style={{ width: `${(comp.score / comp.maxScore) * 100}%` }}
-                />
-              </div>
+              <Progress value={(comp.score / comp.maxScore) * 100} className="h-2 rounded-full" />
               <p className="text-xs text-muted-foreground italic">{comp.feedback}</p>
             </div>
           ))}
